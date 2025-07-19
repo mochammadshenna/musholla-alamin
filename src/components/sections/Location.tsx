@@ -32,18 +32,16 @@ const Location = () => {
         });
 
         // Add marker
-        const marker = new (window as any).google.maps.Marker({
+        const marker = new (window as any).google.maps.marker.AdvancedMarkerElement({
           position: mushollaLocation,
           map: map,
           title: 'Musholla Al-Amin',
-          icon: {
-            path: (window as any).google.maps.SymbolPath.CIRCLE,
-            scale: 8,
-            fillColor: '#d4af37',
-            fillOpacity: 1,
-            strokeColor: '#ffffff',
-            strokeWeight: 2,
-          },
+          content: new (window as any).google.maps.marker.PinElement({
+            background: '#d4af37',
+            borderColor: '#ffffff',
+            glyphColor: '#ffffff',
+            scale: 1.2,
+          }).element,
         });
 
         // Add info window
@@ -63,10 +61,10 @@ const Location = () => {
       }
     };
 
-    // Load Google Maps script (Note: Replace YOUR_API_KEY with actual Google Maps API key)
+    // Load Google Maps script
     if (typeof window !== 'undefined' && !(window as any).google) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${api_key_maps}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${api_key_maps}&libraries=places&loading=async`;
       script.async = true;
       script.defer = true;
       script.onload = initMap;

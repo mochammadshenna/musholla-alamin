@@ -47,11 +47,13 @@ const Header = () => {
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-3 flex-shrink-0"
           >
-            <div className="w-10 h-10 bg-mosque-primary rounded-lg flex items-center justify-center">
-              <div className="w-6 h-6 bg-mosque-accent rounded-sm"></div>
-            </div>
+            <img
+              src="/image/logo.png"
+              alt="Musholla Al-Amin Logo"
+              className="w-10 h-10 object-contain"
+            />
             <div>
               <h1 className="font-heading font-bold text-lg text-foreground">Musholla</h1>
               <p className="text-xs text-muted-foreground">Al - Amin</p>
@@ -89,7 +91,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-mosque-secondary transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-mosque-secondary transition-colors flex-shrink-0 mr-4"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
