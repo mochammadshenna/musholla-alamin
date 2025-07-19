@@ -43,11 +43,13 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center space-x-3 mb-6">
-              <img
-                src="/image/logo.png"
-                alt="Musholla Al-Amin Logo"
-                className="w-10 h-10 object-contain"
-              />
+              <div className="w-10 h-10 bg-mosque-primary rounded-lg flex items-center justify-center">
+                <img
+                  src="/image/logo.png"
+                  alt="Musholla Al-Amin Logo"
+                  className="w-6 h-6 object-contain"
+                />
+              </div>
               <div>
                 <h3 className="font-heading font-bold text-lg">Musholla</h3>
                 <p className="text-sm text-background/80">Al - Amin</p>
