@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Mosque theme colors - warm, elegant palette */
+    --background: 40 25% 97%;
+    --foreground: 25 20% 15%;
+
+    /* Islamic color palette */
+    --mosque-primary: 34 47% 75%;
+    --mosque-primary-foreground: 25 20% 15%;
+    --mosque-secondary: 40 25% 92%;
+    --mosque-secondary-foreground: 25 20% 25%;
+    --mosque-accent: 25 76% 65%;
+    --mosque-accent-foreground: 0 0% 100%;
+    --mosque-gold: 43 89% 70%;
+    --mosque-gold-foreground: 25 20% 15%;
+    --mosque-green: 140 40% 45%;
+    --mosque-green-foreground: 0 0% 100%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(34, 47%, 85%), hsl(40, 25%, 92%));
+    --gradient-card: linear-gradient(145deg, hsl(40, 25%, 95%), hsl(34, 30%, 90%));
+    --gradient-prayer: linear-gradient(90deg, hsl(25, 76%, 75%), hsl(43, 89%, 70%));
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px hsl(25, 20%, 15%, 0.1);
+    --shadow-prayer: 0 8px 30px hsl(25, 76%, 65%, 0.3);
+    --shadow-glow: 0 0 40px hsl(43, 89%, 70%, 0.4);
+
+    /* Base system colors */
+    --background: 40 25% 97%;
+    --foreground: 25 20% 15%;
+
+    --card: 40 25% 95%;
+    --card-foreground: 25 20% 15%;
+
+    --popover: 40 25% 97%;
+    --popover-foreground: 25 20% 15%;
+
+    --primary: 34 47% 75%;
+    --primary-foreground: 25 20% 15%;
+
+    --secondary: 40 25% 92%;
+    --secondary-foreground: 25 20% 25%;
+
+    --muted: 40 20% 90%;
+    --muted-foreground: 25 15% 55%;
+
+    --accent: 25 76% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  }
+
+  /* Navbar Pattern */
+  .navbar-pattern {
+    background-image: 
+      repeating-linear-gradient(45deg, 
+        hsl(var(--mosque-gold) / 0.05) 0px, 
+        hsl(var(--mosque-gold) / 0.05) 2px, 
+        transparent 2px, 
+        transparent 12px);
+  }
+
+  /* Donation Pattern */
+  .donation-pattern {
+    background-image: 
+      conic-gradient(from 45deg at 50% 50%, 
+        hsl(var(--mosque-accent) / 0.1) 0deg, 
+        transparent 90deg, 
+        hsl(var(--mosque-accent) / 0.1) 180deg, 
+        transparent 270deg);
+    background-size: 40px 40px;
+  }
+
+  /* Method Pattern */
+  .method-pattern {
+    background-image: 
+      linear-gradient(30deg, hsl(var(--mosque-primary) / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(var(--mosque-primary) / 0.05) 87.5%, hsl(var(--mosque-primary) / 0.05)),
+      linear-gradient(150deg, hsl(var(--mosque-primary) / 0.05) 12%, transparent 12.5%, transparent 87%, hsl(var(--mosque-primary) / 0.05) 87.5%, hsl(var(--mosque-primary) / 0.05));
+    background-size: 20px 35px;
+    background-position: 0 0, 0 0, 10px 18px, 10px 18px;
+  }
+
+  @layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-primary;
+  }
+}
+
+/* Custom animations for mosque website */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+  }
+  
+  .animate-glow-pulse {
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+  
+  .prayer-highlight {
+    @apply relative overflow-hidden;
+  }
+  
+  .prayer-highlight::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    transform: translateX(-100%);
+    animation: shimmer 2s ease-in-out infinite;
+  }
+  
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  .gradient-prayer {
+    background: var(--gradient-prayer);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-prayer {
+    box-shadow: var(--shadow-prayer);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(43, 89%, 70%, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(43, 89%, 70%, 0.8);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Islamic geometric patterns (subtle background) */
+.islamic-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, hsl(43, 89%, 70%, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, hsl(25, 76%, 65%, 0.1) 2px, transparent 2px);
+  background-size: 50px 50px;
+  background-position: 0 0, 25px 25px;
+}
