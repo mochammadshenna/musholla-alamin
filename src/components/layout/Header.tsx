@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Clock, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const Header = () => {
@@ -79,9 +79,6 @@ const Header = () => {
 
           {/* Quick Info & CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Clock className="w-4 h-4" />
-            </div>
             <Button className="bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground">
               Donasi
             </Button>
