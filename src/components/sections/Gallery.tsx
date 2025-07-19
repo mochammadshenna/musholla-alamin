@@ -25,7 +25,7 @@ const Gallery = () => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, [emblaApi]);
 
-  const scrollTo = useCallback(
+  const scrollToSlide = useCallback(
     (index: number) => emblaApi && emblaApi.scrollTo(index),
     [emblaApi]
   );
@@ -140,7 +140,7 @@ const Gallery = () => {
   );
 
   return (
-    <section className="py-16 bg-gradient-to-br from-mosque-secondary/30 to-background relative overflow-hidden">
+    <section id="gallery" className="py-16 bg-gradient-to-br from-mosque-secondary/30 to-background relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="islamic-pattern"></div>
@@ -183,7 +183,7 @@ const Gallery = () => {
                     ? 'bg-mosque-accent w-6'
                     : 'bg-mosque-accent/30'
                     }`}
-                  onClick={() => scrollTo(index)}
+                  onClick={() => scrollToSlide(index)}
                 />
               ))}
             </div>

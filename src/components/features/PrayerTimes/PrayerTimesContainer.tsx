@@ -40,13 +40,7 @@ const PrayerCountdown = ({ nextPrayer }: { nextPrayer: { name: string; time: str
   }, [nextPrayer.time]);
 
   return (
-    <motion.div
-      initial={{ scale: 0 }}
-      whileInView={{ scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-      className="flex items-center gap-3 md:gap-4 bg-mosque-accent/10 border border-mosque-accent/20 rounded-lg px-4 md:px-6 py-3 md:py-3 w-full md:w-auto"
-    >
+    <div className="flex items-center gap-3 md:gap-4 bg-mosque-accent/10 border border-mosque-accent/20 rounded-lg px-4 md:px-6 py-3 md:py-3 w-full md:w-auto md:inline-flex transition-all duration-300 ease-in-out h-12 md:h-14">
       {/* Bedug Icon */}
       <div className="flex-shrink-0 flex items-center justify-center">
         <img
@@ -63,10 +57,19 @@ const PrayerCountdown = ({ nextPrayer }: { nextPrayer: { name: string; time: str
           {nextPrayer.name} pukul {nextPrayer.time}
         </span>
         <span className="text-mosque-accent/80 text-xs md:text-sm">
-          Adzan akan segera dimulai dalam {timeLeft.hours.toString().padStart(2, '0')}:{timeLeft.minutes.toString().padStart(2, '0')}:{timeLeft.seconds.toString().padStart(2, '0')}
+          Adzan akan segera dimulai dalam{' '}
+          <span className="inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
+            {timeLeft.hours.toString().padStart(2, '0')}
+          </span>
+          :<span className="inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
+            {timeLeft.minutes.toString().padStart(2, '0')}
+          </span>
+          :<span className="inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
+            {timeLeft.seconds.toString().padStart(2, '0')}
+          </span>
         </span>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -117,14 +120,14 @@ const PrayerTimesContainer = () => {
     : prayers;
 
   return (
-    <section className="py-8 md:py-12 bg-gradient-to-b from-mosque-primary/5 to-transparent">
+    <section id="prayer-times" className="py-16 md:py-24 bg-gradient-to-b from-mosque-primary/5 to-transparent">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 md:mb-12"
+          className="text-center mb-16 md:mb-16"
         >
           <h2 className="text-2xl md:text-4xl font-bold text-mosque-accent mb-4">
             Jadwal Sholat Hari Ini

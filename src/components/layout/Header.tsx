@@ -1,18 +1,38 @@
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Clock, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isMobile = useIsMobile();
+
+  const scrollToSection = (sectionId: string) => {
+    // Close mobile menu first
+    setIsMenuOpen(false);
+
+    // Small delay to ensure menu closes before scrolling
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const headerHeight = isMobile ? 60 : 80; // Mobile: 50px, Desktop: 80px to prevent cropping
+        const elementPosition = element.offsetTop - headerHeight;
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  };
 
   const navItems = [
-    { name: 'Beranda', href: '#home' },
-    { name: 'Jadwal Sholat', href: '#prayer-times' },
-    { name: 'Kegiatan', href: '#programs' },
-    { name: 'Galeri', href: '#gallery' },
-    { name: 'Donasi', href: '#donation-container' },
-    { name: 'Kontak', href: '#location' },
+    { name: 'Beranda', href: 'home' },
+    { name: 'Jadwal Sholat', href: 'prayer-times' },
+    { name: 'Kegiatan', href: 'programs' },
+    { name: 'Donasi', href: 'donations' },
+    { name: 'Galeri', href: 'gallery' },
+    { name: 'Kontak', href: 'contact' },
   ];
 
   return (
@@ -41,9 +61,9 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
-              <motion.a
+              <motion.button
                 key={item.name}
-                href={item.href}
+                onClick={() => scrollToSection(item.href)}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
@@ -51,7 +71,7 @@ const Header = () => {
               >
                 {item.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-mosque-accent transition-all duration-300 group-hover:w-full"></span>
-              </motion.a>
+              </motion.button>
             ))}
           </nav>
 
@@ -87,17 +107,16 @@ const Header = () => {
           >
             <nav className="container mx-auto px-4 py-4 space-y-4">
               {navItems.map((item, index) => (
-                <motion.a
+                <motion.button
                   key={item.name}
-                  href={item.href}
+                  onClick={() => scrollToSection(item.href)}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * index }}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block py-2 text-foreground hover:text-mosque-accent transition-colors"
+                  className="block w-full text-left py-3 px-2 text-foreground hover:text-mosque-accent hover:bg-mosque-secondary/50 transition-colors rounded-lg"
                 >
                   {item.name}
-                </motion.a>
+                </motion.button>
               ))}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}

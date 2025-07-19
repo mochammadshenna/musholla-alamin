@@ -77,7 +77,7 @@ const Location = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-gradient-to-br from-background to-mosque-secondary/30 relative overflow-hidden">
+    <section id="contact" className="py-16 bg-gradient-to-br from-background to-mosque-secondary/30 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="islamic-pattern"></div>

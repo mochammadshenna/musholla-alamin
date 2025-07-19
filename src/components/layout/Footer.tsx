@@ -2,20 +2,32 @@ import { motion } from 'framer-motion';
 import { Clock, Globe, Instagram, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 
 const Footer = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerHeight = 80; // Approximate header height
+      const elementPosition = element.offsetTop - headerHeight;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const quickLinks = [
-    { name: 'Beranda', href: '#home' },
-    { name: 'Profil', href: '#about' },
-    { name: 'Program', href: '#programs' },
-    { name: 'Jadwal Sholat', href: '#prayer-times' },
-    { name: 'Donasi', href: '#donations' },
-    { name: 'Kontak', href: '#contact' },
+    { name: 'Beranda', href: 'home' },
+    { name: 'Profil', href: 'about' },
+    { name: 'Program', href: 'programs' },
+    { name: 'Jadwal Sholat', href: 'prayer-times' },
+    { name: 'Donasi', href: 'donations' },
+    { name: 'Kontak', href: 'contact' },
   ];
 
   const programs = [
-    { name: 'TPA Al-Amin', href: '#tpa' },
-    { name: 'Kajian Ahad', href: '#kajian' },
-    { name: 'Santunan Anak Yatim', href: '#santunan' },
-    { name: 'Tahsin Al-Qur\'an', href: '#tahsin' },
+    { name: 'TPA Al-Amin', href: 'tpa' },
+    { name: 'Kajian Ahad', href: 'kajian' },
+    { name: 'Santunan Anak Yatim', href: 'santunan' },
+    { name: 'Tahsin Al-Qur\'an', href: 'tahsin' },
   ];
 
   return (
@@ -78,13 +90,13 @@ const Footer = () => {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={link.name}>
-                  <motion.a
+                  <motion.button
                     whileHover={{ x: 5 }}
-                    href={link.href}
-                    className="text-background/80 hover:text-mosque-accent transition-colors text-sm"
+                    onClick={() => scrollToSection(link.href)}
+                    className="text-background/80 hover:text-mosque-accent transition-colors text-sm text-left w-full"
                   >
                     {link.name}
-                  </motion.a>
+                  </motion.button>
                 </li>
               ))}
             </ul>
@@ -101,13 +113,13 @@ const Footer = () => {
             <ul className="space-y-3">
               {programs.map((program, index) => (
                 <li key={program.name}>
-                  <motion.a
+                  <motion.button
                     whileHover={{ x: 5 }}
-                    href={program.href}
-                    className="text-background/80 hover:text-mosque-accent transition-colors text-sm"
+                    onClick={() => scrollToSection(program.href)}
+                    className="text-background/80 hover:text-mosque-accent transition-colors text-sm text-left w-full"
                   >
                     {program.name}
-                  </motion.a>
+                  </motion.button>
                 </li>
               ))}
             </ul>

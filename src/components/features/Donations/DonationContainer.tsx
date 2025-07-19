@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
-import { Heart, Building, Utensils, GraduationCap } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { motion } from 'framer-motion';
+import { Building, GraduationCap, Heart, Utensils } from 'lucide-react';
 
 const DonationContainer = () => {
   const donationCauses = [
@@ -123,8 +123,8 @@ const DonationContainer = () => {
                       Target: {formatCurrency(cause.target)}
                     </span>
                   </div>
-                  <Progress 
-                    value={getProgressPercentage(cause.raised, cause.target)} 
+                  <Progress
+                    value={getProgressPercentage(cause.raised, cause.target)}
                     className="h-2"
                   />
                   <p className="text-xs text-muted-foreground mt-1">
@@ -133,7 +133,7 @@ const DonationContainer = () => {
                 </div>
 
                 {/* CTA Button */}
-                <Button 
+                <Button
                   className="w-full bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground group-hover:shadow-glow transition-all duration-300"
                 >
                   Donasi Sekarang

@@ -46,8 +46,15 @@ const ProgramsGrid = () => {
     },
   ];
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section id="programs" className="py-16 bg-background">
+    <section id="programs" className="py-16 bg-gradient-to-b from-mosque-primary/5 to-transparent">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div
@@ -119,6 +126,7 @@ const ProgramsGrid = () => {
 
                 {/* CTA Button */}
                 <Button
+                  onClick={() => scrollToSection('gallery')}
                   variant="outline"
                   className="w-full group-hover:bg-mosque-accent group-hover:text-mosque-accent-foreground group-hover:border-mosque-accent transition-all duration-300"
                 >
