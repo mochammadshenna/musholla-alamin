@@ -43,9 +43,11 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-mosque-primary rounded-lg flex items-center justify-center">
-                <div className="w-6 h-6 bg-mosque-accent rounded-sm"></div>
-              </div>
+              <img
+                src="/image/logo.png"
+                alt="Musholla Al-Amin Logo"
+                className="w-10 h-10 object-contain"
+              />
               <div>
                 <h3 className="font-heading font-bold text-lg">Musholla</h3>
                 <p className="text-sm text-background/80">Al - Amin</p>
@@ -170,13 +172,8 @@ const Footer = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-background/60 text-sm mb-4 md:mb-0">
-              © 2024 Musholla Al-Amin. Semua hak cipta dilindungi.
+              © 2025 Musholla Al-Amin
             </p>
-            <div className="text-background/60 text-sm">
-              <span>Dibuat dengan </span>
-              <span className="text-mosque-accent">❤️</span>
-              <span> untuk umat</span>
-            </div>
           </div>
         </motion.div>
       </div>
