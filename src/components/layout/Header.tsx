@@ -81,7 +81,6 @@ const Header = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <Clock className="w-4 h-4" />
-              <span>Next: Maghrib 18:20</span>
             </div>
             <Button className="bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground">
               Donasi
