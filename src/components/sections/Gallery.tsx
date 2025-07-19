@@ -3,7 +3,6 @@ import { Card } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
-import { Eye, Share2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 const Gallery = () => {
@@ -102,7 +101,7 @@ const Gallery = () => {
           {/* Overlay Actions */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex gap-2">
-              <Button
+              {/* <Button
                 size="sm"
                 variant="secondary"
                 className="bg-white/20 text-white border-white/30 hover:bg-white/30"
@@ -115,7 +114,7 @@ const Gallery = () => {
                 className="bg-white/20 text-white border-white/30 hover:bg-white/30"
               >
                 <Share2 className="w-4 h-4" />
-              </Button>
+              </Button> */}
             </div>
           </div>
 
@@ -156,10 +155,10 @@ const Gallery = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-            Galeri Musholla Al-Amin
+            Galeri
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Dokumentasi kegiatan yang tersedia di musholla kami
+            Dokumentasi kegiatan yang tersedia di Musholla Al-Amin
           </p>
         </motion.div>
 

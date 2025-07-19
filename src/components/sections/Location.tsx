@@ -96,7 +96,7 @@ const Location = () => {
             Lokasi Musholla
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Kunjungi kami di lokasi yang mudah dijangkau
+            Kunjungi kami di google maps
           </p>
         </motion.div>
 
