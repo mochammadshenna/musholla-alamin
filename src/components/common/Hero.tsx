@@ -79,7 +79,7 @@ const Hero = () => {
           transition={{ delay: 0.9, duration: 0.8 }}
           className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed"
         >
-          Baktijaya Sukmajaya Depok
+          RT 02 Baktijaya Sukmajaya Depok
         </motion.p>
 
         {/* CTA Buttons */}

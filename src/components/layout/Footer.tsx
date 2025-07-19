@@ -24,10 +24,10 @@ const Footer = () => {
   ];
 
   const programs = [
-    { name: 'TPA Al-Amin', href: 'tpa' },
-    { name: 'Kajian Ahad', href: 'kajian' },
-    { name: 'Santunan Anak Yatim', href: 'santunan' },
-    { name: 'Tahsin Al-Qur\'an', href: 'tahsin' },
+    { name: 'TPA Al-Amin', href: 'tpa-al-amin' },
+    { name: 'Kajian Ahad', href: 'kajian-ahad' },
+    { name: 'Santunan Anak Yatim', href: 'santunan-anak-yatim' },
+    { name: 'Tahsin Al-Qur\'an', href: "tahsin-al-qur'an" },
   ];
 
   return (
