@@ -58,13 +58,13 @@ const PrayerCountdown = ({ nextPrayer }: { nextPrayer: { name: string; time: str
         </span>
         <span className="text-mosque-accent/80 text-xs md:text-sm">
           Adzan akan segera dimulai dalam{' '}
-          <span className="inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
+          <span className="text-orange-600 inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
             {timeLeft.hours.toString().padStart(2, '0')}
           </span>
-          :<span className="inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
+          :<span className="text-orange-600 inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
             {timeLeft.minutes.toString().padStart(2, '0')}
           </span>
-          :<span className="inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
+          :<span className="text-orange-600 inline-block min-w-[2ch] transition-all duration-300 ease-in-out">
             {timeLeft.seconds.toString().padStart(2, '0')}
           </span>
         </span>
@@ -129,11 +129,11 @@ const PrayerTimesContainer = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 md:mb-16"
         >
-          <h2 className="text-2xl md:text-4xl font-bold text-mosque-accent mb-4">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
             Jadwal Sholat Hari Ini
           </h2>
-          <p className="text-mosque-accent/70 text-sm md:text-base">
-            Musholla Al-Amin - Depok, Indonesia
+          <p className="text-orange-500 text-sm md:text-base">
+            Musholla Al-Amin - Baktijaya, Depok
           </p>
 
           {/* Prayer Countdown */}
