@@ -131,8 +131,8 @@ const Location = () => {
                 <div>
                   <h3 className="font-bold text-foreground mb-2">Kontak</h3>
                   <div className="text-muted-foreground text-sm space-y-1">
-                    <p>M: +62 896 815 21978</p>
-                    <p>E: info@mushollaalamin.id</p>
+                    <p>Whatsapp: +62 896 815 21978</p>
+                    <p>Email: info@mushollaalamin.id</p>
                   </div>
                 </div>
               </div>

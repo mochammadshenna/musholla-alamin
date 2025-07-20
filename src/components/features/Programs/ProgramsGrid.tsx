@@ -152,10 +152,11 @@ const ProgramsGrid = () => {
               Butuh Informasi Lebih Lanjut?
             </h3>
             <p className="text-muted-foreground mb-6">
-              Hubungi kami untuk mendapatkan informasi lengkap tentang program-program yang tersedia
+              Perihal Infaq, Shodaqoh dan Zakat serta program-program yang lainnya
             </p>
-            <Button className="bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground">
-              Hubungi Kami
+            {/* Button direct to whatsapp*/}
+            <Button className="bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground" onClick={() => window.open('https://wa.me/6289681521978?text=Assalamualaikum%20wr.%20wb.%20DKM%20Musholla%20Al-Amin%2C%20saya%20ingin%20mengikuti%20program%20yang%20tersedia%20di%20Musholla%20Al-Amin', '_blank')}>
+              Hubungi Kami <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Card>
         </motion.div>
