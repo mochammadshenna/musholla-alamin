@@ -192,7 +192,7 @@ const PrayerCard = ({ prayer, index, isCurrent, isNext, isDesktop = false }: Pra
             animate={{ opacity: 1 }}
             className="text-mosque-accent text-xs md:text-sm mt-1 md:mt-2 font-medium"
           >
-            {isDesktop && isPrayerActive(prayer.time) ? 'Sedang Berlangsung' : 'Selanjutnya'}
+            {isPrayerActive(prayer.time) ? 'Sedang Berlangsung' : 'Selanjutnya'}
           </motion.p>
         )}
 

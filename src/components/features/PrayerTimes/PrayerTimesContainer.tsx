@@ -156,10 +156,12 @@ const PrayerTimesContainer = () => {
             Musholla Al-Amin - Baktijaya, Depok
           </p>
 
-          {/* Prayer Countdown */}
-          <div className="mt-4 md:mt-6">
-            <PrayerCountdown nextPrayer={nextPrayer} />
-          </div>
+          {/* Prayer Countdown - Hide when there's an active prayer */}
+          {!activePrayer && (
+            <div className="mt-4 md:mt-6">
+              <PrayerCountdown nextPrayer={nextPrayer} />
+            </div>
+          )}
         </motion.div>
 
         {isMobile ? (

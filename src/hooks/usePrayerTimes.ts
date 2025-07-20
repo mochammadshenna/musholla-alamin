@@ -248,7 +248,7 @@ export const getNextPrayer = (prayerTimes: PrayerTimes): { name: string; time: s
     const [hours, minutes] = prayer.time.split(':').map(Number);
     const prayerMinutes = hours * 60 + minutes;
 
-    if (currentTime < prayerMinutes) {
+    if (currentTime <= prayerMinutes) {
       return prayer;
     }
   }
@@ -313,7 +313,7 @@ export const getNextPrayerForCountdown = (prayerTimes: PrayerTimes): { name: str
     const [hours, minutes] = prayer.time.split(':').map(Number);
     const prayerMinutes = hours * 60 + minutes;
 
-    if (currentTime < prayerMinutes) {
+    if (currentTime <= prayerMinutes) {
       return prayer;
     }
   }
