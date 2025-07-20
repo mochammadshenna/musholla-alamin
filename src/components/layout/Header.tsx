@@ -2,11 +2,41 @@ import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    // Close menu when pressing Escape key
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapeKey);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
 
   const scrollToSection = (sectionId: string) => {
     // Close mobile menu first
@@ -16,7 +46,7 @@ const Header = () => {
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
-        const headerHeight = isMobile ? 60 : 80; // Mobile: 50px, Desktop: 80px to prevent cropping
+        const headerHeight = isMobile ? 60 : 80; // Mobile: 60px, Desktop: 80px for proper fit
         const elementPosition = element.offsetTop - headerHeight;
         window.scrollTo({
           top: elementPosition,
@@ -97,37 +127,50 @@ const Header = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-t border-border"
-          >
-            <nav className="container mx-auto px-4 py-4 space-y-4">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.href)}
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="md:hidden fixed inset-0 bg-black/50 z-40"
+              onClick={() => setIsMenuOpen(false)}
+            />
+
+            {/* Menu Content */}
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-background border-t border-border relative z-50"
+              ref={menuRef}
+            >
+              <nav className="container mx-auto px-4 py-4 space-y-4">
+                {navItems.map((item, index) => (
+                  <motion.button
+                    key={item.name}
+                    onClick={() => scrollToSection(item.href)}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * index }}
+                    className="block w-full text-left py-3 px-2 text-foreground hover:text-mosque-accent hover:bg-mosque-secondary/50 transition-colors rounded-lg"
+                  >
+                    {item.name}
+                  </motion.button>
+                ))}
+                <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * index }}
-                  className="block w-full text-left py-3 px-2 text-foreground hover:text-mosque-accent hover:bg-mosque-secondary/50 transition-colors rounded-lg"
+                  transition={{ delay: 0.1 * navItems.length }}
+                  className="pt-4 border-t border-border"
                 >
-                  {item.name}
-                </motion.button>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * navItems.length }}
-                className="pt-4 border-t border-border"
-              >
-                <Button className="w-full bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground">
-                  Donasi Sekarang
-                </Button>
-              </motion.div>
-            </nav>
-          </motion.div>
+                  <Button className="w-full bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground">
+                    Donasi Sekarang
+                  </Button>
+                </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.header>

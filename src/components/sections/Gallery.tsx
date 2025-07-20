@@ -2,7 +2,8 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import useEmblaCarousel from 'embla-carousel-react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Eye, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 const Gallery = () => {
@@ -11,13 +12,14 @@ const Gallery = () => {
     loop: true,
     align: 'start',
     skipSnaps: false,
-    dragFree: true,
+    dragFree: false,
     containScroll: 'trimSnaps',
-    duration: 10,
+    duration: 20,
     startIndex: 0
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [selectedImage, setSelectedImage] = useState<typeof galleryImages[0] | null>(null);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -38,6 +40,25 @@ const Gallery = () => {
       emblaApi.off('select', onSelect);
     };
   }, [emblaApi, onSelect]);
+
+  // Close modal when pressing Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedImage(null);
+      }
+    };
+
+    if (selectedImage) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedImage]);
 
   const galleryImages = [
     {
@@ -93,7 +114,7 @@ const Gallery = () => {
           <img
             src={image.src}
             alt={image.title}
-            className="w-full h-48 md:h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-64 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -101,20 +122,14 @@ const Gallery = () => {
           {/* Overlay Actions */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex gap-2">
-              {/* <Button
-                size="sm"
-                variant="secondary"
-                className="bg-white/20 text-white border-white/30 hover:bg-white/30"
-              >
-                <Eye className="w-4 h-4" />
-              </Button>
               <Button
                 size="sm"
                 variant="secondary"
-                className="bg-white/20 text-white border-white/30 hover:bg-white/30"
+                className="bg-white/20 text-white border-white/30 hover:bg-white/30 backdrop-blur-sm"
+                onClick={() => setSelectedImage(image)}
               >
-                <Share2 className="w-4 h-4" />
-              </Button> */}
+                <Eye className="w-4 h-4" />
+              </Button>
             </div>
           </div>
 
@@ -126,8 +141,8 @@ const Gallery = () => {
           </div>
         </div>
 
-        <div className="p-4 md:p-6">
-          <h3 className="text-lg md:text-xl font-bold text-foreground mb-2 group-hover:text-mosque-accent transition-colors">
+        <div className="p-6 md:p-8">
+          <h3 className="text-lg md:text-xl font-bold text-foreground mb-3 group-hover:text-mosque-accent transition-colors">
             {image.title}
           </h3>
           <p className="text-muted-foreground text-sm leading-relaxed">
@@ -139,7 +154,7 @@ const Gallery = () => {
   );
 
   return (
-    <section id="gallery" className="py-16 bg-gradient-to-br from-mosque-secondary/30 to-background relative overflow-hidden">
+    <section id="gallery" className="py-16 pb-16 bg-gradient-to-br from-mosque-secondary/30 to-background relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="islamic-pattern"></div>
@@ -212,6 +227,61 @@ const Gallery = () => {
           </Button>
         </motion.div>
       </div>
+
+      {/* Image Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/90 z-50"
+              onClick={() => setSelectedImage(null)}
+            />
+
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="fixed inset-4 z-50 flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative max-w-4xl max-h-full w-full h-full">
+                {/* Close Button */}
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="absolute top-4 right-4 z-10 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors backdrop-blur-sm"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                {/* Image */}
+                <img
+                  src={selectedImage.src}
+                  alt={selectedImage.title}
+                  className="w-full h-full object-contain rounded-lg"
+                />
+
+                {/* Image Info */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                  <h3 className="text-white text-xl font-bold mb-2">
+                    {selectedImage.title}
+                  </h3>
+                  <p className="text-white/90 text-sm">
+                    {selectedImage.description}
+                  </p>
+                  <span className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-xs font-medium mt-2 backdrop-blur-sm">
+                    {selectedImage.category}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
