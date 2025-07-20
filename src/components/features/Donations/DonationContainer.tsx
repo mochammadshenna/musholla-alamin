@@ -1,9 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useState } from 'react';
 
 const DonationContainer = () => {
   const isMobile = useIsMobile();
+  const [showQRISModal, setShowQRISModal] = useState(false);
+
+  const handleDonationClick = () => {
+    setShowQRISModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowQRISModal(false);
+  };
 
   return (
     <section id="donations" className="py-16 bg-mosque-secondary/30">
@@ -23,7 +33,9 @@ const DonationContainer = () => {
               <img
                 src="/image/qris.png"
                 alt="QRIS QR Code"
-                className="w-full max-w-md mx-auto blur-sm"
+                className="w-full h-auto blur-sm"
+              // TODO: Remove blur-sm when you have a real QRIS code
+              // className="w-full h-auto"
               />
             </Card>
           </div>
@@ -45,7 +57,10 @@ const DonationContainer = () => {
             </div>
 
             <div className="pt-4">
-              <Button className="bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground px-8 py-3">
+              <Button
+                onClick={handleDonationClick}
+                className="bg-mosque-accent hover:bg-mosque-accent/90 text-mosque-accent-foreground px-8 py-3"
+              >
                 Donasi Sekarang
               </Button>
             </div>
@@ -87,6 +102,33 @@ const DonationContainer = () => {
           </Card>
         </div>
       </div>
+
+      {/* QRIS Modal */}
+      {showQRISModal && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={handleCloseModal}
+        >
+          <div className="relative max-w-md w-full">
+            <div className="relative bg-white rounded-lg p-6">
+              <button
+                onClick={handleCloseModal}
+                className="absolute top-2 right-2 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                ✕
+              </button>
+              <img
+                src="/image/qris.png"
+                alt="QRIS QR Code"
+                className="w-full h-auto blur-sm"
+              />
+              <p className="text-center text-sm text-gray-600 mt-4">
+                QRIS Code untuk Donasi
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
