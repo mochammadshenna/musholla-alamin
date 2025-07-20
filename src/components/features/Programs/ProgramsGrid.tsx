@@ -26,7 +26,7 @@ const ProgramsGrid = () => {
       icon: Users,
       color: 'mosque-accent',
       features: ['Tafsir Al-Qur\'an', 'Hadits Pilihan', 'Fiqh Sehari-hari'],
-      schedule: 'Ahad, Ba\'da subuh Minggu ke 2 dan 4',
+      schedule: 'Ahad Minggu ke 2 dan 4, Ba\'da subuh',
     },
     {
       title: 'Santunan Anak Yatim',
@@ -42,7 +42,7 @@ const ProgramsGrid = () => {
       icon: Award,
       color: 'mosque-accent',
       features: ['Tajwid Dasar', 'Makharijul Huruf', 'Sifatul Huruf'],
-      schedule: 'Ahad, Ba\'da subuh Minggu ke 2',
+      schedule: 'Ahad Minggu ke 2, Ba\'da subuh',
     },
   ];
 
