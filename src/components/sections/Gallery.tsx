@@ -247,7 +247,7 @@ const Gallery = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               className="fixed inset-4 z-50 flex items-center justify-center"
-              onClick={(e) => e.stopPropagation()}
+              onClick={() => setSelectedImage(null)}
             >
               <div className="relative max-w-4xl max-h-full w-full h-full">
                 {/* Close Button */}
