@@ -19,6 +19,48 @@ const TESTING_CONFIG = {
   // SCENARIO 4: Test Ashar countdown (15:10 - 13 minutes before Ashar)
   // Expected: Countdown shows "Selanjutnya Ashar", sequence: Ashar → Maghrib → Isya → Subuh → Dzuhur
   asharCountdown: false, // Set to true to test Ashar countdown scenario
+
+  // DESKTOP-SPECIFIC SCENARIOS:
+  // SCENARIO 5: Test Dzuhur next but not active (11:30 - 32 minutes before Dzuhur)
+  // Expected: Desktop shows Dzuhur with "Selanjutnya" (not active yet)
+  dzuhurNextNotActive: false, // Set to true to test Dzuhur next but not active
+
+  // SCENARIO 6: Test Ashar next but not active (14:50 - 33 minutes before Ashar)
+  // Expected: Desktop shows Ashar with "Selanjutnya" (not active yet)
+  asharNextNotActive: false, // Set to true to test Ashar next but not active
+
+  // SCENARIO 7: Test Maghrib active (17:55 - exactly at prayer time)
+  // Expected: Desktop shows Maghrib with "Sedang Berlangsung" (active)
+  maghribActive: false, // Set to true to test Maghrib active scenario
+
+  // SCENARIO 8: Test Isya next but not active (18:30 - 38 minutes before Isya)
+  // Expected: Desktop shows Isya with "Selanjutnya" (not active yet)
+  isyaNextNotActive: false, // Set to true to test Isya next but not active
+
+  // DESKTOP "SEDANG BERLANGSUNG" TEST SCENARIOS:
+  // SCENARIO 9: Test Dzuhur next and active (12:02 - exactly at Dzuhur time)
+  // Expected: Desktop shows Dzuhur with "Sedang Berlangsung" (next prayer is active)
+  dzuhurNextAndActive: false, // Set to true to test Dzuhur next and active
+
+  // SCENARIO 10: Test Ashar next and active (15:23 - exactly at Ashar time)
+  // Expected: Desktop shows Ashar with "Sedang Berlangsung" (next prayer is active)
+  asharNextAndActive: false, // Set to true to test Ashar next and active
+
+  // SCENARIO 11: Test Maghrib next and active (17:55 - exactly at Maghrib time)
+  // Expected: Desktop shows Maghrib with "Sedang Berlangsung" (next prayer is active)
+  maghribNextAndActive: false, // Set to true to test Maghrib next and active
+
+  // SCENARIO 12: Test Isya next and active (19:08 - exactly at Isya time)
+  // Expected: Desktop shows Isya with "Sedang Berlangsung" (next prayer is active)
+  isyaNextAndActive: false, // Set to true to test Isya next and active
+
+  // SCENARIO 13: Test Dzuhur next and active early (11:55 - 7 minutes before Dzuhur, within active window)
+  // Expected: Desktop shows Dzuhur with "Sedang Berlangsung" (next prayer is active)
+  dzuhurNextAndActiveEarly: false, // Set to true to test Dzuhur next and active early
+
+  // SCENARIO 14: Test Ashar next and active late (15:45 - 22 minutes after Ashar, within active window)
+  // Expected: Desktop shows Ashar with "Sedang Berlangsung" (next prayer is active)
+  asharNextAndActiveLate: false, // Set to true to test Ashar next and active late
 };
 
 // Helper function to get test time based on configuration
@@ -50,6 +92,78 @@ const getTestTime = (): Date | null => {
     const testTime = new Date(now);
     testTime.setHours(15, 10, 0, 0); // 15:10 - Ashar countdown
     console.log('🧪 Testing: Ashar Countdown at 15:10');
+    return testTime;
+  }
+
+  // DESKTOP-SPECIFIC TEST SCENARIOS
+  if (TESTING_CONFIG.dzuhurNextNotActive) {
+    const testTime = new Date(now);
+    testTime.setHours(11, 30, 0, 0); // 11:30 - Dzuhur next but not active (32 min before)
+    console.log('🧪 Testing: Dzuhur Next but Not Active at 11:30');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.asharNextNotActive) {
+    const testTime = new Date(now);
+    testTime.setHours(14, 50, 0, 0); // 14:50 - Ashar next but not active (33 min before)
+    console.log('🧪 Testing: Ashar Next but Not Active at 14:50');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.maghribActive) {
+    const testTime = new Date(now);
+    testTime.setHours(17, 55, 0, 0); // 17:55 - Maghrib active
+    console.log('🧪 Testing: Maghrib Active at 17:55');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.isyaNextNotActive) {
+    const testTime = new Date(now);
+    testTime.setHours(18, 30, 0, 0); // 18:30 - Isya next but not active (38 min before)
+    console.log('🧪 Testing: Isya Next but Not Active at 18:30');
+    return testTime;
+  }
+
+  // DESKTOP "SEDANG BERLANGSUNG" TEST SCENARIOS
+  if (TESTING_CONFIG.dzuhurNextAndActive) {
+    const testTime = new Date(now);
+    testTime.setHours(12, 2, 0, 0); // 12:02 - Dzuhur next and active
+    console.log('🧪 Testing: Dzuhur Next and Active at 12:02');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.asharNextAndActive) {
+    const testTime = new Date(now);
+    testTime.setHours(15, 23, 0, 0); // 15:23 - Ashar next and active
+    console.log('🧪 Testing: Ashar Next and Active at 15:23');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.maghribNextAndActive) {
+    const testTime = new Date(now);
+    testTime.setHours(17, 55, 0, 0); // 17:55 - Maghrib next and active
+    console.log('🧪 Testing: Maghrib Next and Active at 17:55');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.isyaNextAndActive) {
+    const testTime = new Date(now);
+    testTime.setHours(19, 8, 0, 0); // 19:08 - Isya next and active
+    console.log('🧪 Testing: Isya Next and Active at 19:08');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.dzuhurNextAndActiveEarly) {
+    const testTime = new Date(now);
+    testTime.setHours(11, 55, 0, 0); // 11:55 - Dzuhur next and active early
+    console.log('🧪 Testing: Dzuhur Next and Active Early at 11:55');
+    return testTime;
+  }
+
+  if (TESTING_CONFIG.asharNextAndActiveLate) {
+    const testTime = new Date(now);
+    testTime.setHours(15, 45, 0, 0); // 15:45 - Ashar next and active late
+    console.log('🧪 Testing: Ashar Next and Active Late at 15:45');
     return testTime;
   }
 
@@ -114,7 +228,12 @@ export const getCurrentPrayer = (prayerTimes: PrayerTimes): string => {
 
 export const getNextPrayer = (prayerTimes: PrayerTimes): { name: string; time: string } => {
   const now = new Date();
-  const currentTime = now.getHours() * 60 + now.getMinutes();
+
+  // Use test time if testing is enabled, otherwise use real time
+  const testTime = getTestTime();
+  const currentTime = testTime
+    ? testTime.getHours() * 60 + testTime.getMinutes()
+    : now.getHours() * 60 + now.getMinutes();
 
   const prayers = [
     { name: 'Subuh', time: prayerTimes.fajr },

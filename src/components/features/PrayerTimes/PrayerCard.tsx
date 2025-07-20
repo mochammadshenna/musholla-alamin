@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card';
+import { isPrayerActive } from '@/hooks/usePrayerTimes';
 import { motion } from 'framer-motion';
 import { Clock, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -191,7 +192,7 @@ const PrayerCard = ({ prayer, index, isCurrent, isNext, isDesktop = false }: Pra
             animate={{ opacity: 1 }}
             className="text-mosque-accent text-xs md:text-sm mt-1 md:mt-2 font-medium"
           >
-            {isDesktop ? 'Selanjutnya' : 'Sedang Berlangsung'}
+            {isDesktop && isPrayerActive(prayer.time) ? 'Sedang Berlangsung' : 'Selanjutnya'}
           </motion.p>
         )}
 
