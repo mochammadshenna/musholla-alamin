@@ -1,6 +1,6 @@
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from '@/hooks/useLocation';
-import { getCurrentPrayer, getNextPrayer, getRemainingPrayers, usePrayerTimes } from '@/hooks/usePrayerTimes';
+import { getActivePrayer, getCurrentPrayer, getMobilePrayerSequence, getNextPrayer, getNextPrayerForCountdown, usePrayerTimes } from '@/hooks/usePrayerTimes';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import PrayerCard from './PrayerCard';
@@ -111,8 +111,33 @@ const PrayerTimesContainer = () => {
     { name: 'Isya', arabic: 'العشاء', time: prayerTimes.isha, key: 'isha' },
   ];
 
-  // Get remaining prayers for mobile (excluding current and next)
-  const remainingPrayers = getRemainingPrayers(prayerTimes, currentPrayer, nextPrayer);
+  // Mobile-specific logic
+  const activePrayer = getActivePrayer(prayerTimes);
+  const nextPrayerForCountdown = getNextPrayerForCountdown(prayerTimes);
+
+  // Determine mobile prayer sequence based on active prayer or countdown
+  let mobilePrayers: Array<{ name: string; arabic: string; time: string; key: string }> = [];
+  let showCountdown = false;
+  let countdownPrayer = nextPrayerForCountdown;
+
+  if (activePrayer) {
+    // Scenario 1: Active prayer - show 5 cards starting from active prayer
+    mobilePrayers = getMobilePrayerSequence(prayerTimes, activePrayer.key);
+    showCountdown = false;
+  } else {
+    // Scenario 2: Countdown - show countdown + 5 cards starting from next prayer
+    const nameToKeyMap: { [key: string]: string } = {
+      'Subuh': 'fajr',
+      'Dzuhur': 'dhuhr',
+      'Ashar': 'asr',
+      'Maghrib': 'maghrib',
+      'Isya': 'isha'
+    };
+    const nextPrayerKey = nameToKeyMap[nextPrayerForCountdown.name];
+    mobilePrayers = getMobilePrayerSequence(prayerTimes, nextPrayerKey);
+    showCountdown = true;
+    countdownPrayer = nextPrayerForCountdown;
+  }
 
   return (
     <section id="prayer-times" className="py-16 md:py-24 bg-gradient-to-b from-mosque-primary/5 to-transparent">
@@ -138,7 +163,12 @@ const PrayerTimesContainer = () => {
         </motion.div>
 
         {isMobile ? (
-          <PrayerSwiper prayers={remainingPrayers} currentPrayer={currentPrayer} nextPrayer={nextPrayer} />
+          <PrayerSwiper
+            prayers={mobilePrayers}
+            currentPrayer={activePrayer?.key || ''}
+            nextPrayer={countdownPrayer}
+            showCountdown={showCountdown}
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {prayers.map((prayer, index) => (

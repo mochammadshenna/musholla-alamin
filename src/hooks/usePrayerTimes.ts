@@ -83,7 +83,84 @@ export const getNextPrayer = (prayerTimes: PrayerTimes): { name: string; time: s
   return { name: 'Subuh', time: prayerTimes.fajr };
 };
 
-// Get remaining prayers in sequence (for mobile view)
+// Mobile-specific functions
+export const isPrayerActive = (prayerTime: string): boolean => {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  const [hours, minutes] = prayerTime.split(':').map(Number);
+  const prayerMinutes = hours * 60 + minutes;
+
+  // Check if current time is within 10 minutes before to 30 minutes after prayer time
+  const timeDiff = currentTime - prayerMinutes;
+  return timeDiff >= -10 && timeDiff <= 30;
+};
+
+export const getActivePrayer = (prayerTimes: PrayerTimes): { name: string; time: string; key: string } | null => {
+  const prayers = [
+    { name: 'Subuh', time: prayerTimes.fajr, key: 'fajr' },
+    { name: 'Dzuhur', time: prayerTimes.dhuhr, key: 'dhuhr' },
+    { name: 'Ashar', time: prayerTimes.asr, key: 'asr' },
+    { name: 'Maghrib', time: prayerTimes.maghrib, key: 'maghrib' },
+    { name: 'Isya', time: prayerTimes.isha, key: 'isha' },
+  ];
+
+  for (const prayer of prayers) {
+    if (isPrayerActive(prayer.time)) {
+      return prayer;
+    }
+  }
+  return null;
+};
+
+export const getNextPrayerForCountdown = (prayerTimes: PrayerTimes): { name: string; time: string } => {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+
+  const prayers = [
+    { name: 'Subuh', time: prayerTimes.fajr },
+    { name: 'Dzuhur', time: prayerTimes.dhuhr },
+    { name: 'Ashar', time: prayerTimes.asr },
+    { name: 'Maghrib', time: prayerTimes.maghrib },
+    { name: 'Isya', time: prayerTimes.isha },
+  ];
+
+  for (const prayer of prayers) {
+    const [hours, minutes] = prayer.time.split(':').map(Number);
+    const prayerMinutes = hours * 60 + minutes;
+
+    if (currentTime < prayerMinutes) {
+      return prayer;
+    }
+  }
+
+  return { name: 'Subuh', time: prayerTimes.fajr };
+};
+
+export const getMobilePrayerSequence = (prayerTimes: PrayerTimes, startPrayerKey: string): Array<{ name: string; arabic: string; time: string; key: string }> => {
+  const allPrayers = [
+    { name: 'Subuh', arabic: 'الفجر', time: prayerTimes.fajr, key: 'fajr' },
+    { name: 'Dzuhur', arabic: 'الظهر', time: prayerTimes.dhuhr, key: 'dhuhr' },
+    { name: 'Ashar', arabic: 'العصر', time: prayerTimes.asr, key: 'asr' },
+    { name: 'Maghrib', arabic: 'المغرب', time: prayerTimes.maghrib, key: 'maghrib' },
+    { name: 'Isya', arabic: 'العشاء', time: prayerTimes.isha, key: 'isha' },
+  ];
+
+  // Find the starting index
+  const startIndex = allPrayers.findIndex(prayer => prayer.key === startPrayerKey);
+
+  if (startIndex === -1) return allPrayers;
+
+  // Create sequence starting from the specified prayer
+  const sequence = [];
+  for (let i = 0; i < 5; i++) {
+    const index = (startIndex + i) % 5;
+    sequence.push(allPrayers[index]);
+  }
+
+  return sequence;
+};
+
+// Get remaining prayers in sequence (for mobile view) - Fixed to use proper ordering
 export const getRemainingPrayers = (prayerTimes: PrayerTimes, currentPrayer: string, nextPrayer: { name: string; time: string }) => {
   const allPrayers = [
     { name: 'Subuh', arabic: 'الفجر', time: prayerTimes.fajr, key: 'fajr' },
@@ -93,9 +170,18 @@ export const getRemainingPrayers = (prayerTimes: PrayerTimes, currentPrayer: str
     { name: 'Isya', arabic: 'العشاء', time: prayerTimes.isha, key: 'isha' },
   ];
 
+  // Create a mapping for prayer names to keys
+  const nameToKeyMap: { [key: string]: string } = {
+    'Subuh': 'fajr',
+    'Dzuhur': 'dhuhr',
+    'Ashar': 'asr',
+    'Maghrib': 'maghrib',
+    'Isya': 'isha'
+  };
+
   // Filter out current prayer and next prayer (which is in countdown)
   return allPrayers.filter(prayer => {
-    const nextPrayerKey = nextPrayer.name.toLowerCase();
+    const nextPrayerKey = nameToKeyMap[nextPrayer.name];
     return prayer.key !== currentPrayer && prayer.key !== nextPrayerKey;
   });
 };

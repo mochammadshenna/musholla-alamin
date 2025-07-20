@@ -14,9 +14,10 @@ interface PrayerSwiperProps {
   prayers: Prayer[];
   currentPrayer: string;
   nextPrayer: { name: string; time: string };
+  showCountdown: boolean;
 }
 
-const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer }: PrayerSwiperProps) => {
+const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer, showCountdown }: PrayerSwiperProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'center',
     containScroll: 'trimSnaps',
@@ -31,7 +32,7 @@ const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer }: PrayerSwiperProps)
     [emblaApi]
   );
 
-  // Auto scroll to countdown card (index 0) for mobile
+  // Auto scroll to first card (countdown or active prayer)
   useEffect(() => {
     if (emblaApi) {
       scrollTo(0);
@@ -51,19 +52,21 @@ const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer }: PrayerSwiperProps)
 
       <div className="embla overflow-hidden" ref={emblaRef}>
         <div className="embla__container flex gap-2 md:gap-4">
-          {/* Countdown Card - First for mobile */}
-          <div className="embla__slide flex-[0_0_240px] md:flex-[0_0_280px] min-w-0">
-            <CountdownCard nextPrayer={nextPrayer} />
-          </div>
+          {/* Countdown Card - Only show if showCountdown is true */}
+          {showCountdown && (
+            <div className="embla__slide flex-[0_0_240px] md:flex-[0_0_280px] min-w-0">
+              <CountdownCard nextPrayer={nextPrayer} />
+            </div>
+          )}
 
-          {/* Remaining Prayer Cards */}
+          {/* Prayer Cards */}
           {prayers.map((prayer, index) => (
             <div key={`${prayer.name}-${index}`} className="embla__slide flex-[0_0_240px] md:flex-[0_0_280px] min-w-0">
               <PrayerCard
                 prayer={prayer}
                 index={index}
                 isCurrent={currentPrayer === prayer.key}
-                isNext={false} // Since we're hiding the next prayer from countdown
+                isNext={false}
               />
             </div>
           ))}
