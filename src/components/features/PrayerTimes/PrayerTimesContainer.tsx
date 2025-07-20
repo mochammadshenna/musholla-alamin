@@ -1,6 +1,6 @@
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from '@/hooks/useLocation';
-import { getCurrentPrayer, getNextPrayer, usePrayerTimes } from '@/hooks/usePrayerTimes';
+import { getCurrentPrayer, getNextPrayer, getRemainingPrayers, usePrayerTimes } from '@/hooks/usePrayerTimes';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import PrayerCard from './PrayerCard';
@@ -99,25 +99,20 @@ const PrayerTimesContainer = () => {
     );
   }
 
+  // Use same logic for both mobile and desktop
   const currentPrayer = getCurrentPrayer(prayerTimes);
   const nextPrayer = getNextPrayer(prayerTimes);
 
   const prayers = [
     { name: 'Subuh', arabic: 'الفجر', time: prayerTimes.fajr, key: 'fajr' },
-    { name: 'Dhuhur', arabic: 'الظهر', time: prayerTimes.dhuhr, key: 'dhuhr' },
+    { name: 'Dzuhur', arabic: 'الظهر', time: prayerTimes.dhuhr, key: 'dhuhr' },
     { name: 'Ashar', arabic: 'العصر', time: prayerTimes.asr, key: 'asr' },
     { name: 'Maghrib', arabic: 'المغرب', time: prayerTimes.maghrib, key: 'maghrib' },
     { name: 'Isya', arabic: 'العشاء', time: prayerTimes.isha, key: 'isha' },
   ];
 
-  // Reorder prayers for mobile: current prayer first, then in sequence
-  const reorderedPrayers = isMobile
-    ? prayers.sort((a, b) => {
-      if (a.key === currentPrayer) return -1;
-      if (b.key === currentPrayer) return 1;
-      return prayers.indexOf(a) - prayers.indexOf(b);
-    })
-    : prayers;
+  // Get remaining prayers for mobile (excluding current and next)
+  const remainingPrayers = getRemainingPrayers(prayerTimes, currentPrayer, nextPrayer);
 
   return (
     <section id="prayer-times" className="py-16 md:py-24 bg-gradient-to-b from-mosque-primary/5 to-transparent">
@@ -143,7 +138,7 @@ const PrayerTimesContainer = () => {
         </motion.div>
 
         {isMobile ? (
-          <PrayerSwiper prayers={reorderedPrayers} currentPrayer={currentPrayer} nextPrayer={nextPrayer} />
+          <PrayerSwiper prayers={remainingPrayers} currentPrayer={currentPrayer} nextPrayer={nextPrayer} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {prayers.map((prayer, index) => (

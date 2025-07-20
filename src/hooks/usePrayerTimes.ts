@@ -42,17 +42,18 @@ export const getCurrentPrayer = (prayerTimes: PrayerTimes): string => {
     { name: 'isha', time: prayerTimes.isha },
   ];
 
-  const prayerMinutes = prayers.map(prayer => {
-    const [hours, minutes] = prayer.time.split(':').map(Number);
-    return { name: prayer.name, minutes: hours * 60 + minutes };
-  });
+  // Find the current prayer based on time
+  for (let i = 0; i < prayers.length; i++) {
+    const [hours, minutes] = prayers[i].time.split(':').map(Number);
+    const prayerMinutes = hours * 60 + minutes;
 
-  for (let i = 0; i < prayerMinutes.length; i++) {
-    if (currentTime < prayerMinutes[i].minutes) {
+    // If current time is before this prayer time, the previous prayer is current
+    if (currentTime < prayerMinutes) {
       return i === 0 ? 'isha' : prayers[i - 1].name;
     }
   }
 
+  // If we've passed all prayers today, isha is current
   return 'isha';
 };
 
@@ -68,6 +69,7 @@ export const getNextPrayer = (prayerTimes: PrayerTimes): { name: string; time: s
     { name: 'Isya', time: prayerTimes.isha },
   ];
 
+  // Find the next prayer based on time
   for (const prayer of prayers) {
     const [hours, minutes] = prayer.time.split(':').map(Number);
     const prayerMinutes = hours * 60 + minutes;
@@ -79,4 +81,21 @@ export const getNextPrayer = (prayerTimes: PrayerTimes): { name: string; time: s
 
   // If no prayer found today, return Subuh of next day
   return { name: 'Subuh', time: prayerTimes.fajr };
+};
+
+// Get remaining prayers in sequence (for mobile view)
+export const getRemainingPrayers = (prayerTimes: PrayerTimes, currentPrayer: string, nextPrayer: { name: string; time: string }) => {
+  const allPrayers = [
+    { name: 'Subuh', arabic: 'الفجر', time: prayerTimes.fajr, key: 'fajr' },
+    { name: 'Dzuhur', arabic: 'الظهر', time: prayerTimes.dhuhr, key: 'dhuhr' },
+    { name: 'Ashar', arabic: 'العصر', time: prayerTimes.asr, key: 'asr' },
+    { name: 'Maghrib', arabic: 'المغرب', time: prayerTimes.maghrib, key: 'maghrib' },
+    { name: 'Isya', arabic: 'العشاء', time: prayerTimes.isha, key: 'isha' },
+  ];
+
+  // Filter out current prayer and next prayer (which is in countdown)
+  return allPrayers.filter(prayer => {
+    const nextPrayerKey = nextPrayer.name.toLowerCase();
+    return prayer.key !== currentPrayer && prayer.key !== nextPrayerKey;
+  });
 };

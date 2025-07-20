@@ -1,7 +1,7 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect } from 'react';
-import PrayerCard from './PrayerCard';
+import PrayerCard, { CountdownCard } from './PrayerCard';
 
 interface Prayer {
   name: string;
@@ -31,7 +31,7 @@ const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer }: PrayerSwiperProps)
     [emblaApi]
   );
 
-  // Auto scroll to current prayer (index 0 since it's reordered to be first)
+  // Auto scroll to countdown card (index 0) for mobile
   useEffect(() => {
     if (emblaApi) {
       scrollTo(0);
@@ -51,13 +51,19 @@ const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer }: PrayerSwiperProps)
 
       <div className="embla overflow-hidden" ref={emblaRef}>
         <div className="embla__container flex gap-2 md:gap-4">
+          {/* Countdown Card - First for mobile */}
+          <div className="embla__slide flex-[0_0_240px] md:flex-[0_0_280px] min-w-0">
+            <CountdownCard nextPrayer={nextPrayer} />
+          </div>
+
+          {/* Remaining Prayer Cards */}
           {prayers.map((prayer, index) => (
             <div key={`${prayer.name}-${index}`} className="embla__slide flex-[0_0_240px] md:flex-[0_0_280px] min-w-0">
               <PrayerCard
                 prayer={prayer}
                 index={index}
                 isCurrent={currentPrayer === prayer.key}
-                isNext={nextPrayer.name === prayer.name}
+                isNext={false} // Since we're hiding the next prayer from countdown
               />
             </div>
           ))}
