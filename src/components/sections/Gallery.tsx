@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 import useEmblaCarousel from 'embla-carousel-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Eye, X } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 const Gallery = () => {
@@ -250,20 +250,34 @@ const Gallery = () => {
               onClick={() => setSelectedImage(null)}
             >
               <div className="relative max-w-4xl max-h-full w-full h-full">
-                {/* Close Button */}
-                <button
-                  onClick={() => setSelectedImage(null)}
-                  className="absolute top-4 right-4 z-10 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors backdrop-blur-sm"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+                {/* Image with Close Button */}
+                <div className="relative w-full h-full">
+                  <img
+                    src={selectedImage.src}
+                    alt={selectedImage.title}
+                    className="w-full h-full object-contain rounded-lg relative"
+                  />
 
-                {/* Image */}
-                <img
-                  src={selectedImage.src}
-                  alt={selectedImage.title}
-                  className="w-full h-full object-contain rounded-lg"
-                />
+                  {/* Close Button positioned on the image */}
+                  {/* <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+                  >
+                    <button
+                      onClick={() => setSelectedImage(null)}
+                      className="absolute top-4 right-4 z-20 bg-black/80 text-white rounded-full hover:bg-black/90 transition-colors backdrop-blur-sm border border-white/20 pointer-events-auto"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <X className="w-5 h-5" />
+                    </button> */}
+                  {/* </div> */}
+                </div>
 
                 {/* Image Info */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
@@ -282,7 +296,7 @@ const Gallery = () => {
           </>
         )}
       </AnimatePresence>
-    </section>
+    </section >
   );
 };
 
