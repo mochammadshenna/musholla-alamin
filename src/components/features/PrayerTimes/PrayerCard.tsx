@@ -13,6 +13,7 @@ interface PrayerCardProps {
   index: number;
   isCurrent: boolean;
   isNext: boolean;
+  isDesktop?: boolean;
 }
 
 // New Countdown Card Component for Mobile
@@ -112,7 +113,7 @@ export const CountdownCard = ({ nextPrayer }: CountdownCardProps) => {
   );
 };
 
-const PrayerCard = ({ prayer, index, isCurrent, isNext }: PrayerCardProps) => {
+const PrayerCard = ({ prayer, index, isCurrent, isNext, isDesktop = false }: PrayerCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -188,7 +189,7 @@ const PrayerCard = ({ prayer, index, isCurrent, isNext }: PrayerCardProps) => {
             animate={{ opacity: 1 }}
             className="text-mosque-accent text-xs md:text-sm mt-1 md:mt-2 font-medium"
           >
-            Sedang Berlangsung
+            {isDesktop ? 'Selanjutnya' : 'Sedang Berlangsung'}
           </motion.p>
         )}
 

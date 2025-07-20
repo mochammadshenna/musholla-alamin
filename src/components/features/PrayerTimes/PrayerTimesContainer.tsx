@@ -146,8 +146,9 @@ const PrayerTimesContainer = () => {
                 key={prayer.key}
                 prayer={prayer}
                 index={index}
-                isCurrent={prayer.key === currentPrayer}
-                isNext={prayer.key === nextPrayer.name.toLowerCase()}
+                isCurrent={prayer.name === nextPrayer.name}
+                isNext={false}
+                isDesktop={true}
               />
             ))}
           </div>
