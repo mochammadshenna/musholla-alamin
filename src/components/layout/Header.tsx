@@ -46,7 +46,13 @@ const Header = () => {
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
-        const headerHeight = isMobile ? 60 : 80; // Mobile: 60px, Desktop: 80px for proper fit
+        let headerHeight = isMobile ? 60 : 80; // Mobile: 60px, Desktop: 80px for proper fit
+
+        // Special handling for gallery section on mobile
+        if (sectionId === 'gallery' && isMobile) {
+          headerHeight = 80; // Extra offset for gallery to ensure proper fit
+        }
+
         const elementPosition = element.offsetTop - headerHeight;
         window.scrollTo({
           top: elementPosition,
