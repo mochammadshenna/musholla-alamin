@@ -125,11 +125,13 @@ const PrayerCard = ({ prayer, index, isCurrent, isNext, isDesktop = false }: Pra
     >
       <Card className={`
         p-4 md:p-6 text-center transition-all duration-300 relative overflow-hidden h-full min-h-[160px] md:min-h-[200px] flex flex-col justify-center rounded-lg
-        ${isCurrent
+        ${isCurrent && isDesktop
           ? 'bg-gradient-prayer border-mosque-accent shadow-prayer prayer-highlight'
-          : isNext
-            ? 'bg-mosque-gold/10 border-mosque-gold/30 shadow-soft'
-            : 'bg-gradient-card border-mosque-primary/20 hover:border-mosque-primary/40 shadow-soft hover:shadow-prayer/50'
+          : isCurrent && !isDesktop
+            ? 'bg-gradient-to-br from-mosque-gold/20 to-mosque-accent/10 border-mosque-gold/30 shadow-prayer'
+            : isNext
+              ? 'bg-mosque-gold/10 border-mosque-gold/30 shadow-soft'
+              : 'bg-gradient-card border-mosque-primary/20 hover:border-mosque-primary/40 shadow-soft hover:shadow-prayer/50'
         }
       `}>
         {/* Current Prayer Indicator */}
