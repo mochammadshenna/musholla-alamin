@@ -54,7 +54,7 @@ const PrayerCountdown = ({ nextPrayer }: { nextPrayer: { name: string; time: str
       {/* Content */}
       <div className="flex flex-col md:flex-row md:items-center md:gap-2 text-center md:text-left flex-1">
         <span className="font-semibold text-mosque-accent text-xs md:text-sm">
-          {nextPrayer.name} pukul {nextPrayer.time}
+          {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} - {nextPrayer.name} pukul {nextPrayer.time}
         </span>
         <span className="text-mosque-accent/80 text-xs md:text-sm">
           Adzan akan segera dimulai dalam{' '}
