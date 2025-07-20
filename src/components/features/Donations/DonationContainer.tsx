@@ -23,7 +23,7 @@ const DonationContainer = () => {
               <img
                 src="/image/qris.png"
                 alt="QRIS QR Code"
-                className="w-full max-w-md mx-auto"
+                className="w-full max-w-md mx-auto blur-sm"
               />
             </Card>
           </div>

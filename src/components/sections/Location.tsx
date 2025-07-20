@@ -129,7 +129,7 @@ const Location = () => {
                   <Phone className="w-6 h-6 text-mosque-accent" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-foreground mb-2">Kontak</h3>
+                  <h3 className="font-bold text-foreground mb-2">Kontak DKM</h3>
                   <div className="text-muted-foreground text-sm space-y-1">
                     <p>Whatsapp: +62 896 815 21978</p>
                     <p>Email: info@mushollaalamin.id</p>

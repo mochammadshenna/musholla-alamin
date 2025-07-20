@@ -13,7 +13,7 @@ const ProgramsGrid = () => {
   });
   const programs = [
     {
-      title: 'TPA Al-Amin',
+      title: 'TPQ Al-Amin',
       description: 'Program pendidikan Al-Qur\'an untuk anak-anak dengan metode pembelajaran yang menyenangkan dan interaktif.',
       icon: Book,
       color: 'mosque-green',
@@ -26,7 +26,7 @@ const ProgramsGrid = () => {
       icon: Users,
       color: 'mosque-accent',
       features: ['Tafsir Al-Qur\'an', 'Hadits Pilihan', 'Fiqh Sehari-hari'],
-      schedule: 'Ahad, Ba\'da subuh',
+      schedule: 'Ahad, Ba\'da subuh Minggu ke 2 dan 4',
     },
     {
       title: 'Santunan Anak Yatim',
@@ -42,7 +42,7 @@ const ProgramsGrid = () => {
       icon: Award,
       color: 'mosque-accent',
       features: ['Tajwid Dasar', 'Makharijul Huruf', 'Sifatul Huruf'],
-      schedule: 'Ahad, Ba\'da subuh',
+      schedule: 'Ahad, Ba\'da subuh Minggu ke 2',
     },
   ];
 
