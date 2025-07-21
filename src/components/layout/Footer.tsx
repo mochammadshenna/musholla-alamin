@@ -31,8 +31,22 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-foreground text-background">
-      <div className="container mx-auto px-4 pt-16 pb-8">
+    <footer className="bg-foreground text-background relative overflow-hidden">
+      {/* Footer Pattern Background */}
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(45deg, 
+              #dec3a1 0px, 
+              #dec3a1 2px, 
+              transparent 2px, 
+              transparent 12px)
+          `
+        }}
+      />
+
+      <div className="container mx-auto px-4 pt-16 pb-8 relative z-10">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* About Section */}

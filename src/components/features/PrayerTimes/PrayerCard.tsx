@@ -56,42 +56,76 @@ export const CountdownCard = ({ nextPrayer }: CountdownCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
       whileHover={{ scale: 1.02, y: -2 }}
       className="relative z-10"
     >
-      <Card className="p-4 md:p-6 text-center transition-all duration-300 relative overflow-hidden h-full min-h-[160px] md:min-h-[200px] flex flex-col justify-center rounded-lg bg-gradient-to-br from-mosque-gold/20 to-mosque-accent/10 border-mosque-gold/30 shadow-prayer">
+      <Card className="p-4 md:p-6 text-center transition-all duration-300 relative overflow-hidden h-full min-h-[160px] md:min-h-[200px] flex flex-col justify-center rounded-xl bg-gradient-to-br from-orange-50 to-mosque-gold/10 border border-orange-200 shadow-lg hover:shadow-xl">
+        {/* Arabic/Islamic Background Pattern */}
+        <div className="absolute inset-0 opacity-25">
+          {/* Navbar-style Diagonal Pattern */}
+          <div
+            className="w-full h-full rounded-xl"
+            style={{
+              backgroundImage: `
+                repeating-linear-gradient(45deg, 
+                  hsl(var(--mosque-gold) / 0.15) 0px, 
+                  hsl(var(--mosque-gold) / 0.15) 2px, 
+                  transparent 2px, 
+                  transparent 12px)
+              `
+            }}
+          />
+
+          {/* Subtle Corner Accents */}
+          <div className="absolute top-2 left-2 w-6 h-6">
+            <div className="w-full h-full border border-orange-600/40 rotate-45 rounded-sm"></div>
+          </div>
+
+          <div className="absolute top-2 right-2 w-6 h-6">
+            <div className="w-full h-full border border-orange-600/40 -rotate-45 rounded-sm"></div>
+          </div>
+
+          <div className="absolute bottom-2 left-2 w-6 h-6">
+            <div className="w-full h-full border border-orange-600/40 -rotate-45 rounded-sm"></div>
+          </div>
+
+          <div className="absolute bottom-2 right-2 w-6 h-6">
+            <div className="w-full h-full border border-orange-600/40 rotate-45 rounded-sm"></div>
+          </div>
+        </div>
+
         {/* Countdown Icon */}
         <motion.div
-          animate={{ scale: [1, 1.2, 1] }}
+          animate={{ scale: [1, 1.1, 1] }}
           transition={{ repeat: Infinity, duration: 2 }}
           className="absolute top-2 right-2"
         >
-          <div className="bg-mosque-gold/20 rounded-full p-1">
-            <Clock className="w-3 h-3 md:w-4 md:h-4 text-mosque-gold" />
+          <div className="bg-orange-500/20 rounded-full p-1.5">
+            <Clock className="w-3 h-3 md:w-4 md:h-4 text-orange-600" />
           </div>
         </motion.div>
 
-        {/* Title */}
+        {/* Title - Black Text */}
         <motion.h3
-          className="text-sm md:text-lg font-semibold mb-1 md:mb-2 text-foreground"
-          whileHover={{ scale: 1.05 }}
+          className="text-sm md:text-lg font-semibold mb-1 md:mb-2 text-black"
+          whileHover={{ scale: 1.02 }}
         >
           Selanjutnya
         </motion.h3>
 
         {/* Prayer Name */}
-        <p className="ztext-lg md:text-2xl mb-2 md:mb-4 text-mosque-accent">
+        <p className="text-lg md:text-2xl mb-2 md:mb-3 text-mosque-accent font-medium">
           {nextPrayer.name}
         </p>
 
         {/* Countdown Timer */}
         <motion.div
-          className="text-xl md:text-3xl font-bold text-orange-600"
-          whileHover={{ scale: 1.1 }}
+          className="text-xl md:text-3xl font-bold text-orange-600 mb-1 md:mb-2"
+          whileHover={{ scale: 1.05 }}
         >
           {timeLeft.hours.toString().padStart(2, '0')}:{timeLeft.minutes.toString().padStart(2, '0')}:{timeLeft.seconds.toString().padStart(2, '0')}
         </motion.div>
@@ -100,15 +134,13 @@ export const CountdownCard = ({ nextPrayer }: CountdownCardProps) => {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-mosque-accent/80 text-xs md:text-sm mt-1 md:mt-2 font-medium"
+          className="text-mosque-accent/80 text-xs md:text-sm font-medium"
         >
           Pukul {nextPrayer.time}
         </motion.p>
 
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="w-full h-full bg-white/5 rounded-lg"></div>
-        </div>
+        {/* Simple Border Accent */}
+        <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-400 to-mosque-gold"></div>
       </Card>
     </motion.div>
   );

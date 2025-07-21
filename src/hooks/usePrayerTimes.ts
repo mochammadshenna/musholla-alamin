@@ -170,23 +170,175 @@ const getTestTime = (): Date | null => {
   return null; // No testing, use real time
 };
 
-export const fetchPrayerTimes = async (location: Location): Promise<PrayerTimes> => {
-  // Use reliable fallback prayer times for Jakarta (from timesprayer.com widget)
-  console.log('📅 Using prayer times for Jakarta (from timesprayer.com widget)');
+// Local prayer time calculation (fallback when API fails)
+const calculateLocalPrayerTimes = (location: Location): PrayerTimes => {
+  const today = new Date();
+  const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(today);
 
-  const prayerTimes = {
-    fajr: '04:53',
-    dhuhr: '12:02',
-    asr: '15:23',
-    maghrib: '17:55',
-    isha: '19:08',
-    date: new Date().toLocaleDateString(),
-    hijriDate: '24 Muharram 1447',
-    location: 'Jakarta, Indonesia'
+  // Simple calculation based on Jakarta coordinates and current date
+  // This is a basic approximation - for production, use a proper prayer time library
+  const currentMonth = today.getMonth() + 1; // 1-12
+
+  // Approximate prayer times for Jakarta (these vary by season)
+  let prayerTimes;
+
+  if (currentMonth >= 3 && currentMonth <= 5) {
+    // March-May (Spring)
+    prayerTimes = {
+      fajr: '04:45',
+      dhuhr: '11:59',
+      asr: '15:21',
+      maghrib: '17:53',
+      isha: '19:23'
+    };
+  } else if (currentMonth >= 6 && currentMonth <= 8) {
+    // June-August (Summer)
+    prayerTimes = {
+      fajr: '04:30',
+      dhuhr: '11:55',
+      asr: '15:15',
+      maghrib: '17:45',
+      isha: '19:15'
+    };
+  } else if (currentMonth >= 9 && currentMonth <= 11) {
+    // September-November (Fall)
+    prayerTimes = {
+      fajr: '04:40',
+      dhuhr: '11:58',
+      asr: '15:18',
+      maghrib: '17:50',
+      isha: '19:20'
+    };
+  } else {
+    // December-February (Winter)
+    prayerTimes = {
+      fajr: '04:50',
+      dhuhr: '12:02',
+      asr: '15:25',
+      maghrib: '17:55',
+      isha: '19:25'
+    };
+  }
+
+  return {
+    ...prayerTimes,
+    date: today.toLocaleDateString(),
+    hijriDate: hijriDate,
+    location: `${location.city || 'Jakarta'}, ${location.country || 'Indonesia'}`,
+    source: 'local' // Indicate this is locally calculated
   };
+};
 
-  console.log('✅ Prayer times loaded successfully:', prayerTimes);
-  return prayerTimes;
+// Real API call to fetch prayer times
+export const fetchPrayerTimes = async (location: Location): Promise<PrayerTimes> => {
+  try {
+    console.log('📅 Fetching prayer times from API...');
+    console.log('📍 Location:', location);
+
+    // Determine API base URL based on environment
+    const isDevelopment = import.meta.env.DEV;
+    const baseUrl = isDevelopment
+      ? 'http://localhost:3001'
+      : window.location.origin; // Use same domain in production
+
+    console.log(`🌍 Environment: ${isDevelopment ? 'Development' : 'Production'}`);
+    console.log(`🔗 Base URL: ${baseUrl}`);
+
+    // Try multiple prayer time APIs for reliability
+    const apis = [
+      // Primary API: Vercel API route (production) or local proxy (development)
+      `${baseUrl}/api/prayer-times?city=Jakarta&country=Indonesia&method=8`,
+      // Fallback: Direct API (might work in some browsers)
+      `https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=8`,
+      // Alternative calculation method
+      `${baseUrl}/api/prayer-times?city=Jakarta&country=Indonesia&method=2`,
+      // Another alternative method
+      `${baseUrl}/api/prayer-times?city=Jakarta&country=Indonesia&method=1`,
+    ];
+
+    let lastError: Error | null = null;
+
+    for (let i = 0; i < apis.length; i++) {
+      const apiUrl = apis[i];
+      try {
+        console.log(`🔄 Attempt ${i + 1}/${apis.length}: Trying API: ${apiUrl}`);
+
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log(`📡 Response status: ${response.status} ${response.statusText}`);
+
+        if (!response.ok) {
+          throw new Error(`API request failed with status: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('📊 API Response data:', data);
+
+        if (!data.data || !data.data.timings) {
+          throw new Error('Invalid API response format - missing data or timings');
+        }
+
+        const timings = data.data.timings;
+        const date = data.data.date;
+
+        console.log('⏰ Raw timings from API:', timings);
+        console.log('📅 Date info from API:', date);
+
+        // Transform API response to our format
+        const prayerTimes: PrayerTimes = {
+          fajr: timings.Fajr || '04:53',
+          dhuhr: timings.Dhuhr || '12:02',
+          asr: timings.Asr || '15:23',
+          maghrib: timings.Maghrib || '17:55',
+          isha: timings.Isha || '19:08',
+          date: date?.readable || new Date().toLocaleDateString(),
+          hijriDate: `${date?.hijri?.day} ${date?.hijri?.month?.en} ${date?.hijri?.year}` || '24 Muharram 1447',
+          location: `${location.city || 'Jakarta'}, ${location.country || 'Indonesia'}`,
+          source: 'api' // Indicate this is real API data
+        };
+
+        console.log('✅ Prayer times fetched successfully from API:', prayerTimes);
+        return prayerTimes;
+
+      } catch (error) {
+        console.warn(`⚠️ API attempt ${i + 1} failed:`, error);
+        lastError = error as Error;
+
+        // If this is the last attempt, don't continue
+        if (i === apis.length - 1) {
+          break;
+        }
+
+        // Wait a bit before trying the next API
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        continue;
+      }
+    }
+
+    // If all APIs fail, use local calculation instead of static fallback
+    console.warn('⚠️ Failed to fetch prayer times from all APIs, using local calculation:', lastError);
+
+    const localTimes = calculateLocalPrayerTimes(location);
+    console.log('📅 Using locally calculated prayer times:', localTimes);
+    return localTimes;
+
+  } catch (error) {
+    console.warn('⚠️ Unexpected error in prayer times fetching, using local calculation:', error);
+
+    // Return local calculation as final fallback
+    const localTimes = calculateLocalPrayerTimes(location);
+    console.log('📅 Using locally calculated prayer times as fallback:', localTimes);
+    return localTimes;
+  }
 };
 
 export const usePrayerTimes = (location: Location) => {

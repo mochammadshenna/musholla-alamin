@@ -52,7 +52,7 @@ const PrayerSwiper = ({ prayers, currentPrayer, nextPrayer, showCountdown }: Pra
 
       <div className="embla overflow-hidden" ref={emblaRef}>
         <div className="embla__container flex gap-2 md:gap-4">
-          {/* Countdown Card - Only show if showCountdown is true */}
+          {/* Countdown Card - Same size as regular cards */}
           {showCountdown && (
             <div className="embla__slide flex-[0_0_240px] md:flex-[0_0_280px] min-w-0">
               <CountdownCard nextPrayer={nextPrayer} />

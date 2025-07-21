@@ -13,6 +13,7 @@ export interface PrayerTimes {
   date: string;
   hijriDate?: string;
   location?: string;
+  source?: 'api' | 'fallback' | 'local'; // Indicate data source
 }
 
 export interface Location {
