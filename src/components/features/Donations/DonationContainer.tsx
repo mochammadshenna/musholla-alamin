@@ -26,10 +26,10 @@ const DonationContainer = () => {
         </div>
 
         {/* Main Content */}
-        <div className={`grid grid-cols-1 ${isMobile ? 'gap-8' : 'lg:grid-cols-2 gap-2'} items-center`}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* QRIS Image */}
           <div className="flex justify-center lg:justify-start">
-            <Card className={`${isMobile ? 'p-6' : 'p-8'} bg-white shadow-soft`}>
+            <Card className="p-6 lg:p-8 bg-white shadow-soft max-w-md lg:max-w-lg">
               <img
                 src="/image/qris.png"
                 alt="QRIS QR Code"
@@ -41,7 +41,7 @@ const DonationContainer = () => {
           </div>
 
           {/* Text Content */}
-          <div className={`space-y-4 ${isMobile ? '' : 'lg:-ml-8'}`}>
+          <div className="space-y-6">
             <div className="space-y-4">
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Musholla Al-Amin menyediakan fasilitas Infaq bagi Jama'ah Masjid dengan menggunakan QRIS, disamping fasilitas kotak infaq yang sudah tersedia terlebih dahulu.

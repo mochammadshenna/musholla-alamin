@@ -35,7 +35,7 @@ export const QuranContainer: React.FC = () => {
                                 Gagal Memuat Data
                             </h3>
                             <p className="text-gray-600 mb-4">
-                                Terjadi kesalahan saat memuat data Al-Quran. Silakan coba lagi.
+                                Terjadi kesalahan saat memuat data Al-Qur&apos;an. Silakan coba lagi.
                             </p>
                             <Button onClick={() => refetch()} className="bg-green-600 hover:bg-green-700">
                                 <RefreshCw className="w-4 h-4 mr-2" />
@@ -69,7 +69,7 @@ export const QuranContainer: React.FC = () => {
                         <BookOpen className="w-8 h-8 text-white" />
                     </div>
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-                        Al-Quran
+                        Al-Qur&apos;an
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Baca dan pelajari Al-Quran dengan mudah. Pilih surah yang ingin Anda baca.

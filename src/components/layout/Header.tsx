@@ -3,12 +3,14 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showQRISModal, setShowQRISModal] = useState(false);
   const isMobile = useIsMobile();
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -48,13 +50,29 @@ const Header = () => {
     setShowQRISModal(false);
   };
 
+  const handleLogoClick = () => {
+    // console.log('Logo clicked! Navigating to home...');
+    // Scroll to top of the page instead of navigating
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    setIsMenuOpen(false); // Close mobile menu if open
+  };
+
   const scrollToSection = (sectionId: string) => {
     // Close mobile menu first
     setIsMenuOpen(false);
 
     // Small delay to ensure menu closes before scrolling
     setTimeout(() => {
-      const element = document.getElementById(sectionId);
+      // Map navigation hrefs to actual section IDs
+      let actualSectionId = sectionId;
+      if (sectionId === 'quran') {
+        actualSectionId = 'quran-section';
+      }
+
+      const element = document.getElementById(actualSectionId);
       if (element) {
         let headerHeight = isMobile ? 60 : 80; // Mobile: 60px, Desktop: 80px for proper fit
 
@@ -76,6 +94,7 @@ const Header = () => {
     { name: 'Beranda', href: 'home' },
     { name: 'Jadwal Sholat', href: 'prayer-times' },
     { name: 'Kegiatan', href: 'programs' },
+    { name: 'Al-Qur\'an', href: 'quran' },
     { name: 'Donasi', href: 'donations' },
     { name: 'Galeri', href: 'gallery' },
     { name: 'Kontak', href: 'contact' },
@@ -94,14 +113,23 @@ const Header = () => {
             {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="flex items-center space-x-3 flex-shrink-0"
+              className="flex items-center space-x-3 flex-shrink-0 cursor-pointer select-none"
+              onClick={handleLogoClick}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleLogoClick();
+                }
+              }}
             >
               <img
                 src="/image/logo.png"
                 alt="Musholla Al-Amin Logo"
-                className="w-10 h-10 object-contain"
+                className="w-10 h-10 object-contain pointer-events-none"
               />
-              <div>
+              <div className="pointer-events-none">
                 <h1 className="font-heading font-bold text-lg text-foreground">Musholla</h1>
                 <p className="text-xs text-muted-foreground">Al - Amin</p>
               </div>
