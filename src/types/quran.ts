@@ -14,7 +14,7 @@ export interface QuranDetail extends QuranSurah {
 }
 
 export interface QuranAyat {
-    id: number;
+    nomor: number;
     ar: string;
     tr: string;
     idn: string;

@@ -266,7 +266,7 @@ export const QuranDetail: React.FC = () => {
 
                                 {memoizedSurah.ayat?.map((ayat, index) => (
                                     <motion.div
-                                        key={`ayat-${ayat.id}`}
+                                        key={`ayat-${ayat.nomor}`}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -277,7 +277,7 @@ export const QuranDetail: React.FC = () => {
                                                 <div className="flex items-start justify-between mb-4">
                                                     <div className="flex items-center space-x-3">
                                                         <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                                            {ayat.id}
+                                                            {ayat.nomor}
                                                         </div>
                                                     </div>
                                                 </div>
