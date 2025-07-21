@@ -141,7 +141,9 @@ export const QuranDetail: React.FC = () => {
 
                         <div className="text-center">
                             <h1 className="text-2xl font-bold">Al-Quran</h1>
-                            <p className="text-green-100">Detail Surah</p>
+                            <p className="text-green-100">
+                                Surah {memoizedSurah?.nama_latin}
+                            </p>
                         </div>
 
                         <div className="w-20"></div>
