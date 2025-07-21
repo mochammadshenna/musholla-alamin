@@ -236,107 +236,66 @@ const calculateLocalPrayerTimes = (location: Location): PrayerTimes => {
 // Real API call to fetch prayer times
 export const fetchPrayerTimes = async (location: Location): Promise<PrayerTimes> => {
   try {
-    console.log('📅 Fetching prayer times from API...');
+    console.log('📅 Fetching prayer times...');
     console.log('📍 Location:', location);
 
-    // Determine API base URL based on environment
-    const isDevelopment = import.meta.env.DEV;
-    const baseUrl = isDevelopment
-      ? 'http://localhost:3001'
-      : window.location.origin; // Use same domain in production
+    // Try direct API call first (works in some browsers)
+    const apiUrl = `https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=8`;
 
-    console.log(`🌍 Environment: ${isDevelopment ? 'Development' : 'Production'}`);
-    console.log(`🔗 Base URL: ${baseUrl}`);
+    try {
+      console.log(`🔄 Trying direct API: ${apiUrl}`);
 
-    // Try multiple prayer time APIs for reliability
-    const apis = [
-      // Primary API: Vercel API route (production) or local proxy (development)
-      `${baseUrl}/api/prayer-times?city=Jakarta&country=Indonesia&method=8`,
-      // Fallback: Direct API (might work in some browsers)
-      `https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=8`,
-      // Alternative calculation method
-      `${baseUrl}/api/prayer-times?city=Jakarta&country=Indonesia&method=2`,
-      // Another alternative method
-      `${baseUrl}/api/prayer-times?city=Jakarta&country=Indonesia&method=1`,
-    ];
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    let lastError: Error | null = null;
+      console.log(`📡 Response status: ${response.status} ${response.statusText}`);
 
-    for (let i = 0; i < apis.length; i++) {
-      const apiUrl = apis[i];
-      try {
-        console.log(`🔄 Attempt ${i + 1}/${apis.length}: Trying API: ${apiUrl}`);
-
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        console.log(`📡 Response status: ${response.status} ${response.statusText}`);
-
-        if (!response.ok) {
-          throw new Error(`API request failed with status: ${response.status} ${response.statusText}`);
-        }
-
+      if (response.ok) {
         const data = await response.json();
         console.log('📊 API Response data:', data);
 
-        if (!data.data || !data.data.timings) {
-          throw new Error('Invalid API response format - missing data or timings');
+        if (data.data && data.data.timings) {
+          const timings = data.data.timings;
+          const date = data.data.date;
+
+          console.log('⏰ Raw timings from API:', timings);
+          console.log('📅 Date info from API:', date);
+
+          // Transform API response to our format
+          const prayerTimes: PrayerTimes = {
+            fajr: timings.Fajr || '04:53',
+            dhuhr: timings.Dhuhr || '12:02',
+            asr: timings.Asr || '15:23',
+            maghrib: timings.Maghrib || '17:55',
+            isha: timings.Isha || '19:08',
+            date: date?.readable || new Date().toLocaleDateString(),
+            hijriDate: `${date?.hijri?.day} ${date?.hijri?.month?.en} ${date?.hijri?.year}` || '24 Muharram 1447',
+            location: `${location.city || 'Jakarta'}, ${location.country || 'Indonesia'}`,
+            source: 'api' // Indicate this is real API data
+          };
+
+          console.log('✅ Prayer times fetched successfully from API:', prayerTimes);
+          return prayerTimes;
         }
-
-        const timings = data.data.timings;
-        const date = data.data.date;
-
-        console.log('⏰ Raw timings from API:', timings);
-        console.log('📅 Date info from API:', date);
-
-        // Transform API response to our format
-        const prayerTimes: PrayerTimes = {
-          fajr: timings.Fajr || '04:53',
-          dhuhr: timings.Dhuhr || '12:02',
-          asr: timings.Asr || '15:23',
-          maghrib: timings.Maghrib || '17:55',
-          isha: timings.Isha || '19:08',
-          date: date?.readable || new Date().toLocaleDateString(),
-          hijriDate: `${date?.hijri?.day} ${date?.hijri?.month?.en} ${date?.hijri?.year}` || '24 Muharram 1447',
-          location: `${location.city || 'Jakarta'}, ${location.country || 'Indonesia'}`,
-          source: 'api' // Indicate this is real API data
-        };
-
-        console.log('✅ Prayer times fetched successfully from API:', prayerTimes);
-        return prayerTimes;
-
-      } catch (error) {
-        console.warn(`⚠️ API attempt ${i + 1} failed:`, error);
-        lastError = error as Error;
-
-        // If this is the last attempt, don't continue
-        if (i === apis.length - 1) {
-          break;
-        }
-
-        // Wait a bit before trying the next API
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        continue;
       }
+    } catch (apiError) {
+      console.warn('⚠️ Direct API call failed, using local calculation:', apiError);
     }
 
-    // If all APIs fail, use local calculation instead of static fallback
-    console.warn('⚠️ Failed to fetch prayer times from all APIs, using local calculation:', lastError);
-
+    // If API fails, use local calculation
+    console.log('📅 Using locally calculated prayer times');
     const localTimes = calculateLocalPrayerTimes(location);
-    console.log('📅 Using locally calculated prayer times:', localTimes);
+    console.log('📅 Local prayer times:', localTimes);
     return localTimes;
 
   } catch (error) {
     console.warn('⚠️ Unexpected error in prayer times fetching, using local calculation:', error);
-
-    // Return local calculation as final fallback
     const localTimes = calculateLocalPrayerTimes(location);
-    console.log('📅 Using locally calculated prayer times as fallback:', localTimes);
+    console.log('📅 Fallback to local prayer times:', localTimes);
     return localTimes;
   }
 };
