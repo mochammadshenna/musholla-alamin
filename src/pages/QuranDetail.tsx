@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, Copy, Play, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Copy, Pause, Play, RefreshCw } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Badge } from '../components/ui/badge';
@@ -18,6 +18,8 @@ export const QuranDetail: React.FC = () => {
         parseInt(surahNumber || '1')
     );
     const [playingAudio, setPlayingAudio] = useState<string | null>(null);
+    const [isSurahAudioPlaying, setIsSurahAudioPlaying] = useState(false);
+    const [surahAudio, setSurahAudio] = useState<HTMLAudioElement | null>(null);
 
     const isMakkiyah = surah?.tempat_turun === 'mekah';
 
@@ -49,6 +51,45 @@ export const QuranDetail: React.FC = () => {
         audio.onended = () => {
             setPlayingAudio(null);
         };
+    };
+
+    const handleSurahAudio = (audioUrl: string) => {
+        if (isSurahAudioPlaying && surahAudio) {
+            // Pause audio
+            surahAudio.pause();
+            setIsSurahAudioPlaying(false);
+        } else {
+            // Play audio
+            if (surahAudio) {
+                surahAudio.play().catch(() => {
+                    toast({
+                        title: "Error",
+                        description: "Gagal memutar audio surah",
+                        variant: "destructive",
+                    });
+                    setIsSurahAudioPlaying(false);
+                });
+            } else {
+                // Create new audio instance
+                const audio = new Audio(audioUrl);
+                setSurahAudio(audio);
+
+                audio.play().catch(() => {
+                    toast({
+                        title: "Error",
+                        description: "Gagal memutar audio surah",
+                        variant: "destructive",
+                    });
+                    setIsSurahAudioPlaying(false);
+                });
+
+                audio.onended = () => {
+                    setIsSurahAudioPlaying(false);
+                    setSurahAudio(null);
+                };
+            }
+            setIsSurahAudioPlaying(true);
+        }
     };
 
     const handleCopyAyat = async (text: string) => {
@@ -250,10 +291,14 @@ export const QuranDetail: React.FC = () => {
                                         <div className="flex space-x-3 pt-4">
                                             <Button
                                                 className="bg-green-600 hover:bg-green-700 text-white"
-                                                onClick={() => handlePlayAudio(memoizedSurah.audio, 0)}
+                                                onClick={() => handleSurahAudio(memoizedSurah.audio)}
                                             >
-                                                <Play className="w-4 h-4 mr-2" />
-                                                Putar Audio Surah
+                                                {isSurahAudioPlaying ? (
+                                                    <Pause className="w-4 h-4 mr-2" />
+                                                ) : (
+                                                    <Play className="w-4 h-4 mr-2" />
+                                                )}
+                                                {isSurahAudioPlaying ? 'Jeda Audio Surah' : 'Putar Audio Surah'}
                                             </Button>
                                         </div>
                                     </div>
