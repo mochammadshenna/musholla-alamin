@@ -2,6 +2,7 @@ import Hero from '@/components/common/Hero';
 import DonationContainer from '@/components/features/Donations/DonationContainer';
 import PrayerTimesContainer from '@/components/features/PrayerTimes/PrayerTimesContainer';
 import ProgramsGrid from '@/components/features/Programs/ProgramsGrid';
+import { QuranContainer } from '@/components/features/Quran/QuranContainer';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import Gallery from '@/components/sections/Gallery';
@@ -16,6 +17,7 @@ const Index = () => {
         <Hero />
         <PrayerTimesContainer />
         <ProgramsGrid />
+        <QuranContainer />
         <DonationContainer />
         <Gallery />
         <Location />
