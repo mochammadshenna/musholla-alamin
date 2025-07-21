@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, Copy, FileText, Play, RefreshCw } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft, Copy, Play, RefreshCw } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader } from '../components/ui/card';
@@ -13,6 +13,7 @@ import { cleanHtml } from '../lib/utils';
 export const QuranDetail: React.FC = () => {
     const { surahNumber } = useParams<{ surahNumber: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const { data: surah, isLoading, error, refetch } = useQuranDetail(
         parseInt(surahNumber || '1')
     );
@@ -22,6 +23,11 @@ export const QuranDetail: React.FC = () => {
 
     // Memoize the surah data to prevent unnecessary re-renders
     const memoizedSurah = useMemo(() => surah, [surah]);
+
+    // Scroll to top when component mounts
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handlePlayAudio = (audioUrl: string, ayatId: number) => {
         if (playingAudio === audioUrl) {
@@ -75,6 +81,17 @@ export const QuranDetail: React.FC = () => {
         return <div className="text-gray-700 leading-relaxed italic text-sm" dangerouslySetInnerHTML={{ __html: cleanedHtml }} />;
     };
 
+    // Handle back navigation based on source
+    const handleBackNavigation = () => {
+        // Check if user came from Quran List page
+        if (location.state?.from === 'quran-list') {
+            navigate('/quran');
+        } else {
+            // Default: go back to previous page
+            navigate(-1);
+        }
+    };
+
     if (error) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-green-50 to-white py-16">
@@ -114,7 +131,7 @@ export const QuranDetail: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="flex items-center justify-between">
                         <Button
-                            onClick={() => navigate(-1)}
+                            onClick={handleBackNavigation}
                             variant="ghost"
                             className="text-white hover:bg-white/20"
                         >
@@ -262,44 +279,34 @@ export const QuranDetail: React.FC = () => {
                                                         <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                                                             {ayat.id}
                                                         </div>
-                                                        <div className="w-1 h-10 bg-gradient-to-br from-green-400 to-green-500 rounded-full"></div>
-                                                    </div>
-
-                                                    <div className="flex space-x-2">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className={`text-green-600 hover:bg-green-50 ${playingAudio === ayat.audio ? 'bg-green-100' : ''
-                                                                }`}
-                                                            onClick={() => handlePlayAudio(ayat.audio, ayat.id)}
-                                                        >
-                                                            <Play className="w-4 h-4" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="text-green-600 hover:bg-green-50"
-                                                            onClick={() => handleCopyAyat(ayat.ar)}
-                                                        >
-                                                            <Copy className="w-4 h-4" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            className="text-green-600 hover:bg-green-50"
-                                                            onClick={() => handleCopyAyat(ayat.idn)}
-                                                        >
-                                                            <FileText className="w-4 h-4" />
-                                                        </Button>
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    {/* Arabic Text */}
-                                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                                        <p className="text-2xl font-arabic leading-loose text-gray-800 text-right" dir="rtl">
-                                                            {ayat.ar}
-                                                        </p>
+                                                    {/* Arabic Text with Green Line and Copy Button */}
+                                                    <div className="relative">
+                                                        {/* Green Line on the Left */}
+                                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-green-400 to-green-500 rounded-full"></div>
+
+                                                        {/* Arabic Text */}
+                                                        <div className="bg-gray-50 p-4 rounded-lg ml-4">
+                                                            <p className="text-2xl font-arabic leading-loose text-gray-800 text-right" dir="rtl">
+                                                                {ayat.ar}
+                                                            </p>
+                                                        </div>
+
+                                                        {/* Copy Button under Arabic Text */}
+                                                        <div className="flex justify-end mt-2 ml-4">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="text-green-600 hover:bg-green-50"
+                                                                onClick={() => handleCopyAyat(ayat.ar)}
+                                                            >
+                                                                <Copy className="w-4 h-4 mr-1" />
+                                                                Salin Ayat
+                                                            </Button>
+                                                        </div>
                                                     </div>
 
                                                     {/* Latin Text */}

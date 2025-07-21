@@ -31,33 +31,82 @@ const Location = () => {
           ]
         });
 
-        // Add marker
-        const marker = new (window as any).google.maps.marker.AdvancedMarkerElement({
-          position: mushollaLocation,
-          map: map,
-          title: 'Musholla Al-Amin',
-          content: new (window as any).google.maps.marker.PinElement({
-            background: '#d4af37',
-            borderColor: '#ffffff',
-            glyphColor: '#ffffff',
-            scale: 1.2,
-          }).element,
-        });
+        // Add marker with fallback for AdvancedMarkerElement
+        try {
+          // Try to use AdvancedMarkerElement if available
+          if ((window as any).google.maps.marker && (window as any).google.maps.marker.AdvancedMarkerElement) {
+            const marker = new (window as any).google.maps.marker.AdvancedMarkerElement({
+              position: mushollaLocation,
+              map: map,
+              title: 'Musholla Al-Amin',
+              content: new (window as any).google.maps.marker.PinElement({
+                background: '#d4af37',
+                borderColor: '#ffffff',
+                glyphColor: '#ffffff',
+                scale: 1.2,
+              }).element,
+            });
 
-        // Add info window
-        const infoWindow = new (window as any).google.maps.InfoWindow({
-          content: `
-            <div style="padding: 10px; font-family: Arial, sans-serif;">
-              <h3 style="margin: 0 0 10px 0; color: #d4af37;">Musholla Al-Amin</h3>
-              <p style="margin: 0; font-size: 14px;">Jl. Kp. Sugutamu, RT.02/RW.021<br>Bakti Jaya, Kec. Sukmajaya<br>Kota Depok, Jawa Barat</p>
-            </div>
-          `
-        });
+            // Add info window
+            const infoWindow = new (window as any).google.maps.InfoWindow({
+              content: `
+                <div style="padding: 10px; font-family: Arial, sans-serif;">
+                  <h3 style="margin: 0 0 10px 0; color: #d4af37;">Musholla Al-Amin</h3>
+                  <p style="margin: 0; font-size: 14px;">Jl. Kp. Sugutamu, RT.02/RW.021<br>Bakti Jaya, Kec. Sukmajaya<br>Kota Depok, Jawa Barat</p>
+                </div>
+              `
+            });
 
-        // Show info window on marker click
-        marker.addListener('click', () => {
-          infoWindow.open(map, marker);
-        });
+            // Show info window on marker click
+            marker.addListener('click', () => {
+              infoWindow.open(map, marker);
+            });
+          } else {
+            // Fallback to regular Marker
+            const marker = new (window as any).google.maps.Marker({
+              position: mushollaLocation,
+              map: map,
+              title: 'Musholla Al-Amin',
+              icon: {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                  <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" fill="#d4af37" stroke="#ffffff" stroke-width="2"/>
+                    <text x="20" y="25" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">M</text>
+                  </svg>
+                `),
+                scaledSize: new (window as any).google.maps.Size(40, 40),
+                anchor: new (window as any).google.maps.Point(20, 20)
+              }
+            });
+
+            // Add info window
+            const infoWindow = new (window as any).google.maps.InfoWindow({
+              content: `
+                <div style="padding: 10px; font-family: Arial, sans-serif;">
+                  <h3 style="margin: 0 0 10px 0; color: #d4af37;">Musholla Al-Amin</h3>
+                  <p style="margin: 0; font-size: 14px;">Jl. Kp. Sugutamu, RT.02/RW.021<br>Bakti Jaya, Kec. Sukmajaya<br>Kota Depok, Jawa Barat</p>
+                </div>
+              `
+            });
+
+            // Show info window on marker click
+            marker.addListener('click', () => {
+              infoWindow.open(map, marker);
+            });
+          }
+        } catch (error) {
+          console.warn('Google Maps marker initialization failed:', error);
+          // Create a simple fallback marker
+          try {
+            const marker = new (window as any).google.maps.Marker({
+              position: mushollaLocation,
+              map: map,
+              title: 'Musholla Al-Amin'
+            });
+          } catch (fallbackError) {
+            console.error('Fallback marker also failed:', fallbackError);
+          }
+        }
       }
     };
 
@@ -68,6 +117,9 @@ const Location = () => {
       script.async = true;
       script.defer = true;
       script.onload = initMap;
+      script.onerror = () => {
+        console.warn('Failed to load Google Maps API');
+      };
       document.head.appendChild(script);
     } else if ((window as any).google) {
       initMap();

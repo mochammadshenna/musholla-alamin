@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { QuranCard } from '../components/features/Quran/QuranCard';
 import { Button } from '../components/ui/button';
@@ -15,8 +15,17 @@ export const QuranList: React.FC = () => {
     // Memoize the surahs data to prevent unnecessary re-renders
     const memoizedSurahs = useMemo(() => surahs, [surahs]);
 
+    // Scroll to top when component mounts
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const handleSurahClick = (surahNumber: number) => {
-        navigate(`/quran/${surahNumber}`);
+        navigate(`/quran/${surahNumber}`, { state: { from: 'quran-list' } });
+    };
+
+    const handleBackToHome = () => {
+        navigate('/', { state: { scrollTo: 'quran-section' } });
     };
 
     if (error) {
@@ -58,7 +67,7 @@ export const QuranList: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="flex items-center justify-between">
                         <Button
-                            onClick={() => navigate(-1)}
+                            onClick={handleBackToHome}
                             variant="ghost"
                             className="text-white hover:bg-white/20"
                         >

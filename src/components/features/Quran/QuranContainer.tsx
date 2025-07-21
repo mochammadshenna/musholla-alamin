@@ -15,7 +15,7 @@ export const QuranContainer: React.FC = () => {
     const displayedSurahs = useMemo(() => surahs?.slice(0, 3), [surahs]);
 
     const handleSurahClick = (surahNumber: number) => {
-        navigate(`/quran/${surahNumber}`);
+        navigate(`/quran/${surahNumber}`, { state: { from: 'home' } });
     };
 
     const handleViewAllSurahs = () => {
